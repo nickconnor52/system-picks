@@ -1,2 +1,2 @@
-json.extract! matchup, :id, :created_at, :updated_at
+json.merge! matchup.attributes
 json.url matchup_url(matchup, format: :json)
