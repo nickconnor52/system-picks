@@ -11,7 +11,13 @@ default: &default
 
 development:
   <<: *default
-  database: db/development.sqlite3
+  encoding: utf8
+  adapter: postgresql
+  database: <%= ENV['DB_NAME'] %>
+  host: <%= ENV['DB_ENDPOINT'] %>
+  port: <%= ENV['DB_PORT'] %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -22,4 +28,10 @@ test:
 
 production:
   <<: *default
-  database: db/production.sqlite3
+  encoding: utf8
+  adapter: postgresql
+  database: <%= ENV['DB_NAME'] %>
+  host: <%= ENV['DB_ENDPOINT'] %>
+  port: <%= ENV['DB_PORT'] %>
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
