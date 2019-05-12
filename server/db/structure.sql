@@ -137,11 +137,23 @@ CREATE TABLE public.stats (
 
 
 --
+-- Name: team_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.team_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
 -- Name: teams; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.teams (
-    team_id text NOT NULL,
+    team_id text DEFAULT nextval('public.team_id_seq'::regclass) NOT NULL,
     bye_week integer,
     home_field_advantage double precision,
     location text,

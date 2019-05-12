@@ -12,6 +12,7 @@ Things you may want to cover:
 * Configuration
 
 * Database creation
+Database is reliant on an existing AWS RDS DB
 
 * Database initialization
 
@@ -22,8 +23,14 @@ $: rails db:structure:dump
 ```
 
 ```
+$: rails db:drop test
+```
+
+```
 $: rails db:structure:load test
 ```
+
+If this is run multiple times, you'll get conflict issues.
 
 * How to run the test suite
 

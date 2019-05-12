@@ -74,7 +74,7 @@ ActiveRecord::Schema.define(version: 20190512003048) do
     t.integer "week"
   end
 
-  create_table "teams", primary_key: "team_id", id: :text, force: :cascade do |t|
+  create_table "teams", primary_key: "team_id", id: :text, default: -> { "nextval('team_id_seq'::regclass)" }, force: :cascade do |t|
     t.integer "bye_week"
     t.float "home_field_advantage"
     t.text "location"
