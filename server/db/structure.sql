@@ -69,7 +69,9 @@ CREATE TABLE public.matchups (
     "time" text,
     vegas_spread text,
     week integer,
-    spread_history text
+    spread_history text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -158,7 +160,9 @@ CREATE TABLE public.teams (
     home_field_advantage double precision,
     location text,
     name text,
-    nickname text
+    nickname text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -286,6 +290,8 @@ ALTER TABLE ONLY public.stats
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20190512003048');
+('20190512003048'),
+('20190512033324'),
+('20190512040124');
 
 
