@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 20190512003048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "matchups", primary_key: "matchup_id", id: :text, force: :cascade do |t|
+  create_table "matchups", primary_key: "matchup_id", id: :text, default: -> { "nextval('matchup_id_seq'::regclass)" }, force: :cascade do |t|
     t.text "away_team_id"
     t.text "correct_pick"
     t.text "date"
@@ -80,6 +80,11 @@ ActiveRecord::Schema.define(version: 0) do
     t.text "location"
     t.text "name"
     t.text "nickname"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "matchups", "teams", column: "away_team_id", primary_key: "team_id", name: "matchups_away_team_fkey"
