@@ -63,3 +63,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Added at 2019-05-11 20:48:05 -0400 by NickConnor:
 gem "pg", "~> 1.1"
+
+# Added at 2019-05-11 21:09:54 -0400 by NickConnor:
+gem "schema_to_scaffold", "~> 0.8.0"
