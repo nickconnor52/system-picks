@@ -1,0 +1,17 @@
+<%= form_with(model: matchup, local: true) do |form| %>
+  <% if matchup.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(matchup.errors.count, "error") %> prohibited this matchup from being saved:</h2>
+
+      <ul>
+      <% matchup.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
