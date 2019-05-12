@@ -1,17 +1,13 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
+This is the server side specific README. It's really just a collection of reminders for myself on why I did things certain ways and notes while I learn Rails.
 
 * Ruby version
 
-* System dependencies
-
-* Configuration
+Currently using Ruby 2.4.3
 
 * Database creation
+
 Database is reliant on an existing AWS RDS DB
 
 * Database initialization
@@ -34,8 +30,6 @@ If this is run multiple times, you'll get conflict issues.
 
 * How to run the test suite
 
+Utilize Guard in the CLI and binding.pry in the test to make your life way easier!
+
 * Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
