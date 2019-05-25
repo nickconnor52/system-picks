@@ -55,6 +55,18 @@ RSpec.describe TeamsController, type: :controller do
     end
   end
 
+  describe "GET #index" do
+    it "returns all teams in the database" do
+      team = Team.create! valid_attributes
+      get :index, params: {}, session: valid_session
+
+      jsonResponse = JSON.parse(response.body)
+      fieldNames = team.attribute_names
+
+      expect(jsonResponse.first.keys).to match_array(fieldNames)
+    end
+  end
+
   describe "GET #show" do
     it "returns a success response" do
       team = Team.create! valid_attributes
