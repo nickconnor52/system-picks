@@ -228,6 +228,7 @@ export default {
         method: 'GET'
       })
         .then(response => {
+          console.log(response)
           this.teams = response.data['teams']
         })
     },
@@ -311,7 +312,7 @@ ul matchup {
 #matchups .btn-primary {
   background-color: #ff5f5f;
   border-color: #ff5f5f;
-  
+
 }
 
 #matchups .btn-primary:hover {
