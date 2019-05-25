@@ -228,8 +228,7 @@ export default {
         method: 'GET'
       })
         .then(response => {
-          console.log(response)
-          this.teams = response.data['teams']
+          this.teams = response.data
         })
     },
     fetchMatchups () {

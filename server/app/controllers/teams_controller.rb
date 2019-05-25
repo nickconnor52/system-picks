@@ -6,6 +6,7 @@ class TeamsController < ApplicationController
   # GET /teams.json
   def index
     @teams = Team.all
+    render :json => @teams
   end
 
   # GET /teams/1
