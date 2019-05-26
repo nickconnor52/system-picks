@@ -143,7 +143,7 @@ export default {
       return _.orderBy(this.weekCount, Number, ['desc'])
     },
     weekMatchups () {
-      let filteredList = this.matchups.filter(matchup => matchup.week === this.activeWeek.toString())
+      let filteredList = this.matchups.filter(matchup => matchup.week.toString() === this.activeWeek.toString())
       return _.orderBy(filteredList, ['date', 'time'], ['asc', 'asc'])
     },
     overallRecord () {
@@ -191,7 +191,7 @@ export default {
     this.fetchTeams()
     this.fetchMatchups()
     this.$on('deletedMatchup', (response) => {
-      this.matchups = response.data['matchups']
+      this.matchups = response.data
     })
   },
   methods: {
@@ -238,6 +238,7 @@ export default {
       })
         .then(response => {
           this.matchups = response.data
+          console.log(response.data)
         })
     },
     logoSrc (index) {

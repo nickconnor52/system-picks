@@ -251,7 +251,7 @@ export default {
     }
   },
   created () {
-    this.getMatchupStats()
+    // this.getMatchupStats()
     // TODO ---- CALL ON SELECT WEEK OR GET MATCHUP DETAILS SO THAT IT UPDATES
     // DYNAMICALLY THE STATS OBJECT FOR EACH WEEK/MATCHUP
     if (!this.matchup.score) {
@@ -340,7 +340,7 @@ export default {
   },
   watch: {
     activeWeek () {
-      this.getMatchupStats()
+      // this.getMatchupStats()
       if (!this.matchup.score) {
         this.queryForScore()
       }

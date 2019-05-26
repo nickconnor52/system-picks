@@ -5,6 +5,7 @@ class MatchupsController < ApplicationController
   # GET /matchups
   # GET /matchups.json
   def index
+    # TODO - need to join the home and away team info (https://guides.rubyonrails.org/active_record_querying.html)
     @matchups = Matchup.all
 
     render :json => @matchups
