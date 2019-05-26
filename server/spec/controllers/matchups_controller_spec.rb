@@ -29,7 +29,10 @@ RSpec.describe MatchupsController, type: :controller do
   # Matchup. As you add validations to Matchup, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+      "score.home_team": 24,
+      "score.away_team": 14,
+    }
   }
 
   let(:invalid_attributes) {
@@ -46,6 +49,16 @@ RSpec.describe MatchupsController, type: :controller do
       Matchup.create! valid_attributes
       get :index, params: {}, session: valid_session
       expect(response).to be_successful
+    end
+
+    it "returns a JSON object with all matchups" do
+      matchup = Matchup.create! valid_attributes
+      get :index, params: {}, session: valid_session
+
+      jsonResponse = JSON.parse(response.body)
+      fieldNames = matchup.attribute_names
+
+      expect(jsonResponse.first.keys).to match_array(fieldNames)
     end
   end
 

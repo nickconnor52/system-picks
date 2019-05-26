@@ -53,9 +53,7 @@ RSpec.describe TeamsController, type: :controller do
       get :index, params: {}, session: valid_session
       expect(response).to be_successful
     end
-  end
 
-  describe "GET #index" do
     it "returns all teams in the database" do
       team = Team.create! valid_attributes
       get :index, params: {}, session: valid_session

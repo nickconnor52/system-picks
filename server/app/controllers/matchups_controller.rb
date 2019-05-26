@@ -1,10 +1,13 @@
 class MatchupsController < ApplicationController
   before_action :set_matchup, only: [:show, :edit, :update, :destroy]
+  attr_accessor :score
 
   # GET /matchups
   # GET /matchups.json
   def index
     @matchups = Matchup.all
+
+    render :json => @matchups
   end
 
   # GET /matchups/1
