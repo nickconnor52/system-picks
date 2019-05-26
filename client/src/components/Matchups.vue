@@ -237,7 +237,7 @@ export default {
         method: 'GET'
       })
         .then(response => {
-          this.matchups = response.data['matchups']
+          this.matchups = response.data
         })
     },
     logoSrc (index) {
@@ -257,7 +257,7 @@ export default {
           data: payload
         })
           .then(response => {
-            this.matchups = response.data['matchups']
+            this.matchups = response.data
             this.homeSelected = null
             this.awaySelected = null
             this.chosenWeekNumber = ''

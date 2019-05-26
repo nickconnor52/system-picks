@@ -57,7 +57,7 @@
     </div>
   </div>
 
- <!-- Spread Modal --> 
+ <!-- Spread Modal -->
   <div v-if="showSpreadModal">
     <transition name="modal">
       <div class="modal-mask">
@@ -88,7 +88,7 @@
     </transition>
   </div>
 
- <!-- Score Modal --> 
+ <!-- Score Modal -->
   <div v-if="showScoreModal">
     <transition name="modal">
       <div class="modal-mask">
@@ -124,7 +124,7 @@
     </transition>
   </div>
 
- <!-- Notes Modal --> 
+ <!-- Notes Modal -->
   <div v-if="showNoteModal">
     <transition name="modal">
       <div class="modal-mask">
@@ -155,7 +155,7 @@
     </transition>
   </div>
 
-  <!-- Stats Modal --> 
+  <!-- Stats Modal -->
   <div v-if="showMatchupModal">
     <transition name="modal">
       <div class="modal-mask">
@@ -357,7 +357,7 @@ export default {
         axios({
           url: 'https://api.mysportsfeeds.com/v1.2/pull/nfl/current/scoreboard.json?fordate=' + gameDate,
           headers: {
-            'Authorization': 'Basic MzdlODBjYmEtNDk5Yy00YjQ1LWE4NjktOTRkYjBkOmhhcnZleTYyNTM=',
+            'Authorization': 'Basic MzdlODBjYmEtNDk5Yy00YjQ1LWE4NjktOTRkYjBkOmhhcnZleTYyNTM=', // TODO
             'Content-Type': 'application/json'
           },
           method: 'GET'
@@ -469,7 +469,7 @@ export default {
 <style>
 .align-center {
   height: 100%;
-  display: flex; 
+  display: flex;
   align-items: center;  /*Aligns vertically center */
   justify-content: center; /*Aligns horizontally center */
 }
@@ -486,7 +486,7 @@ export default {
   margin-bottom: auto;
   margin-top: auto;
 }
- 
+
 #header-override ul {
   display: grid !important;
   grid-column-gap: 5px;
