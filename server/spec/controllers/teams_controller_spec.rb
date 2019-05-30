@@ -64,27 +64,4 @@ RSpec.describe TeamsController, type: :controller do
       expect(jsonResponse.first.keys).to match_array(fieldNames)
     end
   end
-
-  describe "GET #show" do
-    it "returns a success response" do
-      team = Team.create! valid_attributes
-      get :show, params: {id: team.to_param}, session: valid_session
-      expect(response).to be_successful
-    end
-  end
-
-  describe "GET #new" do
-    it "returns a success response" do
-      get :new, params: {}, session: valid_session
-      expect(response).to be_successful
-    end
-  end
-
-  describe "GET #edit" do
-    it "returns a success response" do
-      team = Team.create! valid_attributes
-      get :edit, params: {id: team.to_param}, session: valid_session
-      expect(response).to be_successful
-    end
-  end
 end
