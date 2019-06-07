@@ -31,5 +31,6 @@ If this is run multiple times, you'll get conflict issues.
 * How to run the test suite
 
 Utilize Guard in the CLI and binding.pry in the test to make your life way easier!
+Run all tests with rspec.
 
 * Services (job queues, cache servers, search engines, etc.)
