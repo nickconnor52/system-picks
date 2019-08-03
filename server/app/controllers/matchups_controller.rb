@@ -5,6 +5,7 @@ class MatchupsController < ApplicationController
   # GET /matchups
   # GET /matchups.json
   def index
+    # Vudo - Need to remove soft-deleted matchups
     # TODO - need to join the home and away team info (https://guides.rubyonrails.org/active_record_querying.html)
     @matchups = Matchup.all
 

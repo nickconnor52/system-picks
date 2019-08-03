@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190512040124) do
+ActiveRecord::Schema.define(version: 20190803030439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20190512040124) do
     t.text "away_team_id"
     t.text "correct_pick"
     t.text "date"
-    t.boolean "deleted"
+    t.boolean "deleted_at"
     t.text "home_team_id"
     t.text "note"
     t.text "score.away_team"
