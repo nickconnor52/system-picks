@@ -59,7 +59,6 @@ CREATE TABLE public.matchups (
     away_team_id text,
     correct_pick text,
     date text,
-    deleted boolean,
     home_team_id text,
     note text,
     "score.away_team" text,
@@ -71,7 +70,8 @@ CREATE TABLE public.matchups (
     week integer,
     spread_history text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    deleted_at timestamp without time zone
 );
 
 
@@ -292,6 +292,9 @@ SET search_path TO "$user", public;
 INSERT INTO "schema_migrations" (version) VALUES
 ('20190512003048'),
 ('20190512033324'),
-('20190512040124');
+('20190512040124'),
+('20190803030439'),
+('20190803055015'),
+('20190803063325');
 
 
