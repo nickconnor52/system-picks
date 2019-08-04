@@ -144,6 +144,10 @@ export default {
     },
     weekMatchups () {
       let filteredList = this.matchups.filter(matchup => matchup.week.toString() === this.activeWeek.toString())
+      filteredList.forEach(matchup => {
+        matchup.awayTeam = this.teams.filter(team => team.team_id === matchup.away_team_id).pop()
+        matchup.homeTeam = this.teams.filter(team => team.team_id === matchup.home_team_id).pop()
+      })
       return _.orderBy(filteredList, ['date', 'time'], ['asc', 'asc'])
     },
     overallRecord () {
@@ -223,6 +227,7 @@ export default {
         })
     },
     fetchTeams () {
+      // Vudo - move to Vuex
       axios({
         url: '/api/teams',
         method: 'GET'
@@ -232,17 +237,14 @@ export default {
         })
     },
     fetchMatchups () {
+      // Vudo - move to Vuex
       axios({
         url: '/api/matchups',
         method: 'GET'
       })
         .then(response => {
           this.matchups = response.data
-          console.log(response.data)
         })
-    },
-    logoSrc (index) {
-      return '../assets/0020919_cincinnati-bengals_300.png'
     },
     selectTeams () {
       if (this.awaySelected !== null && this.homeSelected !== null) {

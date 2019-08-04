@@ -13,7 +13,9 @@ const mutations = {
     state.activeWeek = data
   }
 }
-const actions = { }
+const actions = {
+  // Vudo - Be a good Boyscout and move all Axios Calls here, please!
+}
 
 export default new Vuex.Store({
   state,
