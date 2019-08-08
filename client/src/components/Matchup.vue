@@ -353,7 +353,7 @@ export default {
       let today = moment().format('YYYYMMDD')
       if (gameDate <= today) {
         axios({
-          url: 'https://api.mysportsfeeds.com/v1.2/pull/nfl/current/scoreboard.json?fordate=' + gameDate,
+          url: 'https://api.mysportsfeeds.com/v1.2/pull/nfl/2018-regular/scoreboard.json?fordate=' + gameDate,
           headers: {
             'Authorization': 'Basic MzdlODBjYmEtNDk5Yy00YjQ1LWE4NjktOTRkYjBkOmhhcnZleTYyNTM=', // TODO
             'Content-Type': 'application/json'
