@@ -114,4 +114,17 @@ RSpec.describe MatchupsController, type: :controller do
       expect(response).to be_successful
     end
   end
+
+  describe "PUT #update" do
+    it "updates a chosen matchup record" do
+      matchup = Matchup.create! valid_attributes
+      params = {
+        home_team_score: "52",
+      }
+      put :update, params: { id: matchup.id, matchup: params }
+      matchup.reload
+      expect(response).to be_successful
+      expect(matchup.home_team_score).to eq("52")
+    end
+  end
 end

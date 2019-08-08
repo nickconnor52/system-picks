@@ -417,8 +417,8 @@ export default {
       this.matchup.away_team_score = this.away_team_score
       this.matchup.home_team_score = this.home_team_score
       axios({
-        url: '/api/matchups/updateScore',
-        method: 'POST',
+        url: '/api/matchups/' + this.matchup.matchup_id,
+        method: 'PUT',
         data: this.matchup
       }).then(response => {
         this.showScoreModal = false
