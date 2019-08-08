@@ -33,6 +33,7 @@ RSpec.describe MatchupsController, type: :controller do
       "score.home_team": 24,
       "score.away_team": 14,
       "away_team_id": @away_team.id,
+      "home_team_id": @home_team.id,
     }
   }
 
@@ -46,8 +47,10 @@ RSpec.describe MatchupsController, type: :controller do
   let(:valid_session) { {} }
 
   before do
-    @away_team = Team.new(name: "Bengals")
+    @away_team = Team.new(name: "Browns")
     @away_team.save!
+    @home_team = Team.new(name: "Bengals")
+    @home_team.save!
   end
 
   describe "GET #index" do
@@ -62,12 +65,12 @@ RSpec.describe MatchupsController, type: :controller do
       get :index, params: {}, session: valid_session
 
       jsonResponse = JSON.parse(response.body)
-      fieldNames = matchup.attribute_names
+      fieldNames = matchup.attribute_names.push("away_team", "home_team")
 
       expect(jsonResponse.first.keys).to match_array(fieldNames)
     end
 
-    it 'returns full matchup model data for use' do
+    it 'returns away team correctly populated' do
       matchup = Matchup.create! valid_attributes
       get :index, params: {}, session: valid_session
 
@@ -75,6 +78,16 @@ RSpec.describe MatchupsController, type: :controller do
       awayTeamId = jsonResponse["away_team_id"]
 
       expect(awayTeamId).to eq(matchup.away_team_id)
+    end
+
+    it 'returns full matchup model data for use' do
+      matchup = Matchup.create! valid_attributes
+      get :index, params: {}, session: valid_session
+
+      jsonResponse = JSON.parse(response.body).first
+      awayTeam = jsonResponse["away_team"]
+
+      expect(awayTeam["name"]).to eq(matchup.away_team.name)
     end
   end
 

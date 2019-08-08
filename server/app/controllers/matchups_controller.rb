@@ -6,10 +6,8 @@ class MatchupsController < ApplicationController
   # GET /matchups.json
   def index
     # Vudo - Need to remove soft-deleted matchups
-    # TODO - need to join the home and away team info (https://guides.rubyonrails.org/active_record_querying.html)
     @matchups = Matchup.all
-
-    render :json => @matchups
+    render :json => @matchups, :include => [{:home_team => {:only => :name}}, {:away_team => {:only => :name}}]
   end
 
   # GET /matchups/1
