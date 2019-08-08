@@ -61,8 +61,8 @@ CREATE TABLE public.matchups (
     date text,
     home_team_id text,
     note text,
-    "score.away_team" text,
-    "score.home_team" text,
+    away_team_score text,
+    home_team_score text,
     season integer,
     system_spread text,
     "time" text,
@@ -295,6 +295,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190512040124'),
 ('20190803030439'),
 ('20190803055015'),
-('20190803063325');
+('20190803063325'),
+('20190808023545');
 
 

@@ -22,9 +22,9 @@
   <div id="bootstrap-matchup-override" class="card-body">
     <div class="row justify-content-md-center">
       <div class="col-md-4">
-        <div class="card-body logo" :class="{ 'bg-success': this.predictedWinner.name === matchup.awayTeam.name }">
-        <img :src="getSrc(matchup.awayTeam['name'])" :alt="matchup.awayTeam['name']"/>
-        <h4 class="text-dark">{{matchup.awayTeam['location'] }} {{matchup.awayTeam['name'] }}</h4>
+        <div class="card-body logo" :class="{ 'bg-success': this.predictedWinner.name === matchup.away_team.name }">
+        <img :src="getSrc(matchup.away_team['name'])" :alt="matchup.away_team['name']"/>
+        <h4 class="text-dark">{{matchup.away_team['location'] }} {{matchup.away_team['name'] }}</h4>
         </div>
       </div>
       <div class="col-md-2 align-self-center" style="margin-bottom: 5px">
@@ -35,19 +35,19 @@
         <i v-else-if="matchup.score && !matchup.correctPick" class="far fa-times-circle text-danger" style="font-size: 2em; opacity: 0.8"></i>
       </div>
       <div class="col-md-4">
-        <div class="card-body logo" :class="{ 'bg-success': this.predictedWinner.name === matchup.homeTeam.name }">
-        <img :src="getSrc(matchup.homeTeam['name'])" :alt="matchup.homeTeam['name']"/>
-        <h4 class="text-dark">{{matchup.homeTeam['location'] }} {{ matchup.homeTeam['name'] }}</h4>
+        <div class="card-body logo" :class="{ 'bg-success': this.predictedWinner.name === matchup.home_team.name }">
+        <img :src="getSrc(matchup.home_team['name'])" :alt="matchup.home_team['name']"/>
+        <h4 class="text-dark">{{matchup.home_team['location'] }} {{ matchup.home_team['name'] }}</h4>
         </div>
       </div>
     </div>
     <br>
     <div v-if="matchup.score" class="row justify-content-center">
       <div class="col-md-4">
-        <strong class="score">{{matchup.score.awayTeam}}</strong>
+        <strong class="score">{{matchup.away_team_score}}</strong>
       </div>
       <div class="offset-md-2 col-md-4">
-        <strong class="score">{{matchup.score.homeTeam}}</strong>
+        <strong class="score">{{matchup.home_team_score}}</strong>
       </div>
       <div>
       </div>
@@ -65,7 +65,7 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" style="width: 100%;">{{ matchup.awayTeam.name }} v {{ matchup.homeTeam.name }}</h5>
+                <h5 class="modal-title" style="width: 100%;">{{ matchup.away_team.name }} v {{ matchup.home_team.name }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="showSpreadModal = false">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -96,26 +96,26 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" style="width: 100%;">{{ matchup.awayTeam.name }} v {{ matchup.homeTeam.name }}</h5>
+                <h5 class="modal-title" style="width: 100%;">{{ matchup.away_team.name }} v {{ matchup.home_team.name }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="showScoreModal = false">
                 <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div class="modal-body container">
                 <div class="row justify-content-center">
-                  <label class="col-md-3 col-form-label" for="awayScore">{{ matchup.awayTeam.name }}:</label>
-                  <input type="text" id="awayScore" class="form-control col-md-4" v-model="score.awayTeam" placeholder="Away" style="margin-left: 15px"/>
+                  <label class="col-md-3 col-form-label" for="awayScore">{{ matchup.away_team.name }}:</label>
+                  <input type="text" id="awayScore" class="form-control col-md-4" v-model="away_team_score" placeholder="Away" style="margin-left: 15px"/>
                 </div>
                 <br>
                 <div class="row justify-content-center">
-                  <label class="col-md-3 col-form-label" for="homeScore">{{ matchup.homeTeam.name }}:</label>
-                  <input type="text" id="homeScore" class="form-control col-md-4" v-model="score.homeTeam" placeholder="Home" style="margin-left: 15px"/>
+                  <label class="col-md-3 col-form-label" for="homeScore">{{ matchup.home_team.name }}:</label>
+                  <input type="text" id="homeScore" class="form-control col-md-4" v-model="home_team_score" placeholder="Home" style="margin-left: 15px"/>
                 </div>
                 <br>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" @click="showScoreModal = false">Close</button>
-                <button type="button" class="btn btn-primary" :disabled="score.homeTeam === '' || score.awayTeam === ''" @click="updateScore()">Submit Score</button>
+                <button type="button" class="btn btn-primary" :disabled="home_team_score === '' || away_team_score === ''" @click="updateScore()">Submit Score</button>
               </div>
             </div>
           </div>
@@ -132,7 +132,7 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" style="width: 100%;">{{ matchup.awayTeam.name }} v {{ matchup.homeTeam.name }}</h5>
+                <h5 class="modal-title" style="width: 100%;">{{ matchup.away_team.name }} v {{ matchup.home_team.name }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="showNoteModal = false">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -163,7 +163,7 @@
           <div class="modal-dialog" style="max-width: 1250px" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" style="width: 100%;">{{ matchup.awayTeam.name }} v {{ matchup.homeTeam.name }}</h5>
+                <h5 class="modal-title" style="width: 100%;">{{ matchup.away_team.name }} v {{ matchup.home_team.name }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="showMatchupModal = false">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -289,8 +289,8 @@ export default {
       }
     },
     predictedWinner () {
-      let homeTeam = this.matchup.homeTeam
-      let awayTeam = this.matchup.awayTeam
+      let homeTeam = this.matchup.home_Team
+      let awayTeam = this.matchup.away_team
       if (this.matchup.systemSpread < parseFloat(this.matchup.vegasSpread)) {
         return homeTeam
       } else {
@@ -335,7 +335,7 @@ export default {
       return optionsObject
     },
     matchupPush () {
-      return parseFloat(this.matchup.score.awayTeam - this.matchup.score.homeTeam) === parseFloat(this.matchup.vegasSpread)
+      return parseFloat(this.matchup.away_team_score - this.matchup.home_team_score) === parseFloat(this.matchup.vegasSpread)
     }
   },
   watch: {
@@ -423,11 +423,11 @@ export default {
         data: this.matchup
       }).then(response => {
         this.showScoreModal = false
-        this.matchup.score.homeTeam = response.data.score.homeTeam
-        this.matchup.score.awayTeam = response.data.score.awayTeam
+        this.matchup.home_team_score = response.data.home_team_score
+        this.matchup.away_team_score = response.data.away_team_score
         this.matchup.correctPick = response.data.correctPick
-        this.score.homeTeam = ''
-        this.score.awayTeam = ''
+        this.home_team_score = ''
+        this.away_team_score = ''
         this.$forceUpdate()
         console.log('Score Updated!')
       }).catch(response => {

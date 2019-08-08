@@ -30,8 +30,8 @@ RSpec.describe MatchupsController, type: :controller do
   # adjust the attributes here as well.
   let(:valid_attributes) {
     {
-      "score.home_team": 24,
-      "score.away_team": 14,
+      "home_team_score": 24,
+      "away_team_score": 14,
       "away_team_id": @away_team.id,
       "home_team_id": @home_team.id,
     }
@@ -78,6 +78,7 @@ RSpec.describe MatchupsController, type: :controller do
       awayTeamId = jsonResponse["away_team_id"]
 
       expect(awayTeamId).to eq(matchup.away_team_id)
+      expect(jsonResponse["away_team_score"]).to eq(matchup.away_team_score)
     end
 
     it 'returns full matchup model data for use' do

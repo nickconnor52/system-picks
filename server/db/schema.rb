@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190803063325) do
+ActiveRecord::Schema.define(version: 20190808023545) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,8 +21,8 @@ ActiveRecord::Schema.define(version: 20190803063325) do
     t.text "date"
     t.text "home_team_id"
     t.text "note"
-    t.text "score.away_team"
-    t.text "score.home_team"
+    t.text "away_team_score"
+    t.text "home_team_score"
     t.integer "season"
     t.text "system_spread"
     t.text "time"

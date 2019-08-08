@@ -6,8 +6,8 @@ class MatchupsController < ApplicationController
   # GET /matchups.json
   def index
     # Vudo - Need to remove soft-deleted matchups
-    @matchups = Matchup.all
-    render :json => @matchups, :include => [{:home_team => {:only => :name}}, {:away_team => {:only => :name}}]
+    @matchups = Matchup.includes(:home_team, :away_team).all
+    render :json => @matchups, :include => [:home_team, :away_team]
   end
 
   # GET /matchups/1
