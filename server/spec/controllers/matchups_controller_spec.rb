@@ -32,6 +32,7 @@ RSpec.describe MatchupsController, type: :controller do
     {
       "score.home_team": 24,
       "score.away_team": 14,
+      "away_team_id": @away_team.id,
     }
   }
 
@@ -43,6 +44,11 @@ RSpec.describe MatchupsController, type: :controller do
   # in order to pass any filters (e.g. authentication) defined in
   # MatchupsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
+
+  before do
+    @away_team = Team.new(name: "Bengals")
+    @away_team.save!
+  end
 
   describe "GET #index" do
     it "returns a success response" do
@@ -59,6 +65,16 @@ RSpec.describe MatchupsController, type: :controller do
       fieldNames = matchup.attribute_names
 
       expect(jsonResponse.first.keys).to match_array(fieldNames)
+    end
+
+    it 'returns full matchup model data for use' do
+      matchup = Matchup.create! valid_attributes
+      get :index, params: {}, session: valid_session
+
+      jsonResponse = JSON.parse(response.body).first
+      awayTeamId = jsonResponse["away_team_id"]
+
+      expect(awayTeamId).to eq(matchup.away_team_id)
     end
   end
 
