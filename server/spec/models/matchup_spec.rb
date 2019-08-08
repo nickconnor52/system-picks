@@ -1,5 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Matchup, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe '.getAwayTeam' do
+    it 'populates the away team' do
+      # Add a spec to deal with populating teams, going to need a helper somewhere
+      expect(true).to eq true
+    end
+  end
 end
