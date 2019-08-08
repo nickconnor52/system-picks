@@ -30,9 +30,9 @@
       <div class="col-md-2 align-self-center" style="margin-bottom: 5px">
         <h5 class="align-middle auto-margin">Vegas: {{ vegasSpreadFormatted }}</h5>
         <h5 class="align-end auto-margin">TheSystem: {{ systemSpreadFormatted }}</h5>
-        <i v-if="matchup.score && matchupPush" class="push-box" style="font-size: 1.5em;">PUSH</i>
-        <i v-else-if="matchup.score && matchup.correctPick" class="far fa-check-circle text-success" style="font-size: 2em; opacity: 0.8"></i>
-        <i v-else-if="matchup.score && !matchup.correctPick" class="far fa-times-circle text-danger" style="font-size: 2em; opacity: 0.8"></i>
+        <i v-if="matchup.home_team_score && matchup.away_team_score && matchupPush" class="push-box" style="font-size: 1.5em;">PUSH</i>
+        <i v-else-if="matchup.home_team_score && matchup.away_team_score && matchup.correct_pick === 'true'" class="far fa-check-circle text-success" style="font-size: 2em; opacity: 0.8"></i>
+        <i v-else-if="matchup.home_team_score && matchup.away_team_score && matchup.correct_pick ==='false'" class="far fa-times-circle text-danger" style="font-size: 2em; opacity: 0.8"></i>
       </div>
       <div class="col-md-4">
         <div class="card-body logo" :class="{ 'bg-success': this.predictedWinner.name === matchup.home_team.name }">
@@ -42,7 +42,7 @@
       </div>
     </div>
     <br>
-    <div v-if="matchup.score" class="row justify-content-center">
+    <div v-if="matchup.away_team_score && matchup.home_team_score" class="row justify-content-center">
       <div class="col-md-4">
         <strong class="score">{{matchup.away_team_score}}</strong>
       </div>
@@ -240,10 +240,8 @@ export default {
       showNoteModal: false,
       showMatchupModal: false,
       showSpreadModal: false,
-      score: {
-        homeTeam: '',
-        awayTeam: ''
-      },
+      home_team_score: '',
+      away_team_score: '',
       updatedSpread: '',
       homeTeamStats: {},
       awayTeamStats: {},
@@ -254,7 +252,7 @@ export default {
     // this.getMatchupStats()
     // TODO ---- CALL ON SELECT WEEK OR GET MATCHUP DETAILS SO THAT IT UPDATES
     // DYNAMICALLY THE STATS OBJECT FOR EACH WEEK/MATCHUP
-    if (!this.matchup.score) {
+    if (!this.matchup.home_team_score && !this.matchup.away_team_score) {
       this.queryForScore()
     }
   },
@@ -266,7 +264,7 @@ export default {
       return [this.awayTeamStats, this.homeTeamStats]
     },
     systemSpreadFormatted () {
-      let spread = this.roundHalf(this.matchup.systemSpread)
+      let spread = this.roundHalf(this.matchup.system_spread)
       if (spread > 0) {
         return '+' + spread
       } else if (spread === 0) {
@@ -276,10 +274,10 @@ export default {
       }
     },
     vegasSpreadFormatted () {
-      if (!this.matchup.vegasSpread) {
+      if (!this.matchup.vegas_spread) {
         return 'No Spread Info'
       }
-      let spread = this.matchup.vegasSpread.includes('+') ? this.matchup.vegasSpread.substring(1) : this.matchup.vegasSpread
+      let spread = this.matchup.vegas_spread.includes('+') ? this.matchup.vegas_spread.substring(1) : this.matchup.vegas_spread
       if (spread > 0) {
         return '+' + spread
       } else if (spread === 0 || spread === '0') {
@@ -289,16 +287,16 @@ export default {
       }
     },
     predictedWinner () {
-      let homeTeam = this.matchup.home_Team
+      let homeTeam = this.matchup.home_team
       let awayTeam = this.matchup.away_team
-      if (this.matchup.systemSpread < parseFloat(this.matchup.vegasSpread)) {
+      if (this.matchup.system_spread < parseFloat(this.matchup.vegas_spread)) {
         return homeTeam
       } else {
         return awayTeam
       }
     },
     chartOptions () {
-      var spreadHistory = this.matchup.spreadHistory.map(point => {
+      var spreadHistory = this.matchup.spread_history.map(point => {
         return [point.date, parseFloat(point.spread)]
       })
       let optionsObject = {
@@ -335,13 +333,13 @@ export default {
       return optionsObject
     },
     matchupPush () {
-      return parseFloat(this.matchup.away_team_score - this.matchup.home_team_score) === parseFloat(this.matchup.vegasSpread)
+      return parseFloat(this.matchup.away_team_score - this.matchup.home_team_score) === parseFloat(this.matchup.vegas_spread)
     }
   },
   watch: {
     activeWeek () {
       // this.getMatchupStats()
-      if (!this.matchup.score) {
+      if (!this.matchup.away_team_score && !this.home_team_score) {
         this.queryForScore()
       }
     }
@@ -364,11 +362,11 @@ export default {
         })
           .then(response => {
             let matchupResults = response.data.scoreboard.gameScore.filter(gameScore => {
-              return this.matchup.awayTeam.location === gameScore.game.awayTeam.City && this.matchup.homeTeam.location === gameScore.game.homeTeam.City
+              return this.matchup.away_team.location === gameScore.game.awayTeam.City && this.matchup.home_team.location === gameScore.game.homeTeam.City
             })
             if (matchupResults[0].isCompleted === 'true') {
-              this.score.homeTeam = matchupResults[0].homeScore
-              this.score.awayTeam = matchupResults[0].awayScore
+              this.home_team_score = matchupResults[0].homeScore
+              this.away_team_score = matchupResults[0].awayScore
               this.updateScore()
             }
           })
@@ -408,7 +406,7 @@ export default {
         method: 'POST',
         data: this.matchup
       }).then(response => {
-        this.matchup.systemSpread = response.data.systemSpread
+        this.matchup.system_spread = response.data.system_spread
         this.$parent.$emit('updatedMatchup', response)
       }
       ).catch(error => {
@@ -416,7 +414,8 @@ export default {
       })
     },
     updateScore () {
-      this.matchup.score = JSON.parse(JSON.stringify(this.score))
+      this.matchup.away_team_score = this.away_team_score
+      this.matchup.home_team_score = this.home_team_score
       axios({
         url: '/api/matchups/updateScore',
         method: 'POST',
@@ -425,7 +424,7 @@ export default {
         this.showScoreModal = false
         this.matchup.home_team_score = response.data.home_team_score
         this.matchup.away_team_score = response.data.away_team_score
-        this.matchup.correctPick = response.data.correctPick
+        this.matchup.correct_pick = response.data.correct_pick
         this.home_team_score = ''
         this.away_team_score = ''
         this.$forceUpdate()
@@ -443,7 +442,7 @@ export default {
       }).then(response => {
         this.showSpreadModal = false
         this.matchup.spreadHistory = response.data.spreadHistory
-        this.matchup.vegasSpread = response.data.vegasSpread
+        this.matchup.vegas_spread = response.data.vegas_spread
         this.updatedSpread = ''
       }).catch(response => {
         console.log(response)

@@ -144,10 +144,6 @@ export default {
     },
     weekMatchups () {
       let filteredList = this.matchups.filter(matchup => matchup.week.toString() === this.activeWeek.toString())
-      filteredList.forEach(matchup => {
-        matchup.awayTeam = this.teams.filter(team => team.team_id === matchup.away_team_id).pop()
-        matchup.homeTeam = this.teams.filter(team => team.team_id === matchup.home_team_id).pop()
-      })
       return _.orderBy(filteredList, ['date', 'time'], ['asc', 'asc'])
     },
     overallRecord () {
@@ -155,11 +151,11 @@ export default {
       let lossCount = 0
       let pushCount = 0
       this.matchups.forEach(matchup => {
-        if (matchup.score) {
-          if (matchup.correctPick) {
+        if (matchup.home_team_score && matchup.away_team_score) {
+          if (matchup.correct_pick === 'true') {
             winCount++
           } else {
-            parseFloat(matchup.score.awayTeam - matchup.score.homeTeam) === parseFloat(matchup.vegasSpread) ? pushCount++ : lossCount++
+            parseFloat(matchup.away_team_score - matchup.home_team_score) === parseFloat(matchup.vegas_spread) ? pushCount++ : lossCount++
           }
         }
       })
@@ -175,11 +171,11 @@ export default {
       let lossCount = 0
       let pushCount = 0
       this.weekMatchups.forEach(matchup => {
-        if (matchup.score) {
-          if (matchup.correctPick) {
+        if (matchup.home_team_score && matchup.away_team_score) {
+          if (matchup.correct_pick === 'true') {
             winCount++
           } else {
-            parseFloat(matchup.score.awayTeam - matchup.score.homeTeam) === parseFloat(matchup.vegasSpread) ? pushCount++ : lossCount++
+            parseFloat(matchup.away_team_score - matchup.home_team_score) === parseFloat(matchup.vegas_spread) ? pushCount++ : lossCount++
           }
         }
       })
