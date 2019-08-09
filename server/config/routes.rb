@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   scope path: 'api' do
-    resources :teams
+    resources :teams do
+      post "weekly_stats" => "stats#show"
+      resources :stats, :except => :show
+    end
     resources :matchups
   end
 

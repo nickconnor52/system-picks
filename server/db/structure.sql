@@ -112,11 +112,23 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: stat_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.stat_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
 -- Name: stats; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.stats (
-    stat_id text NOT NULL,
+    stat_id text DEFAULT nextval('public.stat_id_seq'::regclass) NOT NULL,
     def_3rd_per double precision,
     "def_LOS_drive" double precision,
     def_pass_yds_game double precision,
