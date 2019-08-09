@@ -3,7 +3,7 @@
   <div class="card-header">
     <ul id="header-override" class="nav nav-pills card-header-pills d-flex justify-content-md-center matchup-header">
         <li>
-          <a @click="showMatchupModal=true" class="nav-link text-dark" href="#">View Matchup Details</a>
+          <a @click="clickMatchDetails()" class="nav-link text-dark" href="#">View Matchup Details</a>
         </li>
         <li>
           <strong @click="showSpreadModal=true" class="nav-link text-dark pointer" href="#">Update Current Spread</strong>
@@ -191,23 +191,23 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="team in teams" :key="team.team.name">
-                      <th scope="row">{{ team.team.name }}</th>
-                      <td>{{ team.offLOSDrive }}</td>
-                      <td>{{ team.defLOSDrive }}</td>
-                      <td>{{ team.offPtsRz }}</td>
-                      <td>{{ team.defPtsRz }}</td>
-                      <td>{{ team.offRZAGame }}</td>
-                      <td>{{ team.defRZAGame }}</td>
-                      <td>{{ team.giveTakeDiff }}</td>
-                      <td>{{ team.off3rdPct }}</td>
-                      <td>{{ team.def3rdPct }}</td>
-                      <td>{{ team.offPassYdsGame }}</td>
-                      <td>{{ team.offRushYdsGame }}</td>
-                      <td>{{ team.defPassYdsGame }}</td>
-                      <td>{{ team.defRushYdsGame }}</td>
-                      <td>{{ team.offPtsGame }}</td>
-                      <td>{{ team.defPtsGame }}</td>
+                    <tr v-for="team in teams" :key="team.team_id">
+                      <th scope="row">{{ team.name }}</th>
+                      <td>{{ team.off_LOS_drive }}</td>
+                      <td>{{ team.def_LOS_drive }}</td>
+                      <td>{{ team.off_pts_rz }}</td>
+                      <td>{{ team.def_pts_rz }}</td>
+                      <td>{{ team.off_RZA_game }}</td>
+                      <td>{{ team.def_RZA_game }}</td>
+                      <td>{{ team.give_take_diff }}</td>
+                      <td>{{ team.off_3rd_pct }}</td>
+                      <td>{{ team.def_3rd_pct }}</td>
+                      <td>{{ team.off_pass_yds_game }}</td>
+                      <td>{{ team.off_rush_yds_game }}</td>
+                      <td>{{ team.def_pass_yds_game }}</td>
+                      <td>{{ team.def_rush_yds_game }}</td>
+                      <td>{{ team.off_pts_game }}</td>
+                      <td>{{ team.def_pts_game }}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -373,14 +373,39 @@ export default {
           })
       }
     },
-    getMatchupStats () {
+    clickMatchDetails () {
+      this.showMatchupModal = true
+      this.getHomeMatchupStats()
+      this.getAwayMatchupStats()
+    },
+    getHomeMatchupStats (teamId) {
+      const body = {
+        week: this.matchup.week,
+        season: this.matchup.season
+      }
       axios({
-        url: '/api/stats/getMatchupStats',
+        url: '/api/teams/' + this.matchup.home_team_id + '/weekly_stats',
         method: 'POST',
-        data: this.matchup
+        data: body
       }).then(response => {
-        this.homeTeamStats = response.data.homeTeamStats
-        this.awayTeamStats = response.data.awayTeamStats
+        this.homeTeamStats = response.data[0]
+        this.homeTeamStats.name = this.matchup.home_team.name
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    getAwayMatchupStats (teamId) {
+      const body = {
+        week: this.matchup.week,
+        season: this.matchup.season
+      }
+      axios({
+        url: '/api/teams/' + this.matchup.away_team_id + '/weekly_stats',
+        method: 'POST',
+        data: body
+      }).then(response => {
+        this.awayTeamStats = response.data[0]
+        this.awayTeamStats.name = this.matchup.away_team.name
       }).catch(error => {
         console.log(error)
       })
@@ -423,8 +448,8 @@ export default {
         data: this.matchup
       }).then(response => {
         this.showScoreModal = false
-        this.matchup.home_team_score = response.data.home_team_score
-        this.matchup.away_team_score = response.data.away_team_score
+        // this.matchup.home_team_score = response.data.home_team_score
+        // this.matchup.away_team_score = response.data.away_team_score
         this.matchup.correct_pick = response.data.correct_pick
         this.home_team_score = ''
         this.away_team_score = ''
