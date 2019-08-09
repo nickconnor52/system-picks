@@ -129,7 +129,7 @@ CREATE SEQUENCE public.stat_id_seq
 
 CREATE TABLE public.stats (
     stat_id text DEFAULT nextval('public.stat_id_seq'::regclass) NOT NULL,
-    def_3rd_per double precision,
+    def_3rd_pct double precision,
     "def_LOS_drive" double precision,
     def_pass_yds_game double precision,
     def_pts_game double precision,
@@ -308,6 +308,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190803030439'),
 ('20190803055015'),
 ('20190803063325'),
-('20190808023545');
+('20190808023545'),
+('20190809022644');
 
 

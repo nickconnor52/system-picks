@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190808023545) do
+ActiveRecord::Schema.define(version: 20190809022644) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,8 +55,8 @@ ActiveRecord::Schema.define(version: 20190808023545) do
     t.integer "week"
   end
 
-  create_table "stats", primary_key: "stat_id", id: :text, force: :cascade do |t|
-    t.float "def_3rd_per"
+  create_table "stats", primary_key: "stat_id", id: :text, default: -> { "nextval('stat_id_seq'::regclass)" }, force: :cascade do |t|
+    t.float "def_3rd_pct"
     t.float "def_LOS_drive"
     t.float "def_pass_yds_game"
     t.float "def_pts_game"
