@@ -296,7 +296,8 @@ export default {
       }
     },
     chartOptions () {
-      var spreadHistory = this.matchup.spread_history.map(point => {
+      const parsedHistory = JSON.parse(this.matchup.spread_history)
+      var spreadHistory = parsedHistory.map(point => {
         return [point.date, parseFloat(point.spread)]
       })
       let optionsObject = {
@@ -451,8 +452,8 @@ export default {
     addNote () {
       this.matchup.note = this.note
       axios({
-        url: '/api/matchups/addMatchupNote',
-        method: 'POST',
+        url: '/api/matchups/' + this.matchup.matchup_id,
+        method: 'PUT',
         data: this.matchup
       }).then(response => {
         this.note = ''
