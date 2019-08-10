@@ -38,6 +38,12 @@ class MatchupsController < ApplicationController
     # Vudo: Recalculate win or loss value based on updated score (if there is one) -- make own endpoint for score?
     @matchup.update(matchup_params)
     @matchup.reload
+
+    if !(["home_team_score", "away_team_score", "vegas_spread", "system_spread"] & matchup_params.keys).empty?
+      @matchup.correct_pick = @matchup.correct_pick?.to_s
+      @matchup.save!
+    end
+
     render :json => @matchup
   end
 

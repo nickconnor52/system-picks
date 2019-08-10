@@ -34,6 +34,8 @@ RSpec.describe MatchupsController, type: :controller do
       "away_team_score": 14,
       "away_team_id": @away_team.id,
       "home_team_id": @home_team.id,
+      "system_spread": "-17",
+      "vegas_spread": "-13",
     }
   }
 
@@ -125,6 +127,16 @@ RSpec.describe MatchupsController, type: :controller do
       matchup.reload
       expect(response).to be_successful
       expect(matchup.home_team_score).to eq("52")
+    end
+
+    it "updates correct_pick if score is updated" do
+      matchup = Matchup.create! valid_attributes.merge({correct_pick: "false"})
+      params = {
+        home_team_score: "52",
+      }
+      put :update, params: { id: matchup.id, matchup: params }
+      matchup.reload
+      expect(matchup.correct_pick).to eq("true")
     end
   end
 end
