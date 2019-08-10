@@ -8,7 +8,7 @@ RSpec.describe Matchup, type: :model do
     }
   }
 
-  describe ".determineOutcome" do
+  describe ".determine_outcome" do
     it "will determine that the system has correctly predicted a winner" do
       matchup = Matchup.new(matchup_attributes)
       matchup.system_spread = "-5"
@@ -69,7 +69,7 @@ RSpec.describe Matchup, type: :model do
     end
   end
 
-  describe ".teamCovered" do
+  describe ".team_covered" do
     context "determines if a team covered a given spread given" do
       it "home team won and covered" do
       matchup = Matchup.new(matchup_attributes)
@@ -119,6 +119,21 @@ RSpec.describe Matchup, type: :model do
 
         expect(matchup.team_covered?("10", "13", spread)).to eq false
       end
+    end
+  end
+
+  describe ".calculate_system_pick" do
+    it 'will determine what the spread should be' do
+      home_team = Team.new({name: "Bengals"})
+      away_team = Team.new({name: "Browns"})
+      matchup = Matchup.new({
+        home_team_id: home_team.id,
+        away_team_id: away_team.id,
+      })
+
+      spread = matchup.calculate_system_pick
+
+      expect(spread).to eq("100")
     end
   end
 end
