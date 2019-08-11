@@ -124,13 +124,7 @@ RSpec.describe Matchup, type: :model do
 
   describe ".calculate_system_pick" do
     it 'will determine what the spread should be' do
-      home_team = Team.new({name: "Bengals"})
-      away_team = Team.new({name: "Browns"})
-      matchup = Matchup.new({
-        home_team_id: home_team.id,
-        away_team_id: away_team.id,
-      })
-
+      matchup = build(:matchup)
       spread = matchup.calculate_system_pick
 
       expect(spread).to eq("100")
