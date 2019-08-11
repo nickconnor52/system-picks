@@ -25,26 +25,6 @@ require 'rails_helper'
 
 RSpec.describe TeamsController, type: :controller do
 
-  # This should return the minimal set of attributes required to create a valid
-  # Team. As you add validations to Team, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) {
-    {
-      name: 'Bengals',
-      location: 'Cincinnati',
-    }
-  }
-
-  let(:invalid_attributes) {
-    {
-      name: 'Blue Jackets',
-      location: 'Columbus',
-    }
-  }
-
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # TeamsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
   describe "GET #index" do
@@ -55,7 +35,7 @@ RSpec.describe TeamsController, type: :controller do
     end
 
     it "returns all teams in the database" do
-      team = Team.create! valid_attributes
+      team = create(:team, :bengals)
       get :index, params: {}, session: valid_session
 
       jsonResponse = JSON.parse(response.body)
