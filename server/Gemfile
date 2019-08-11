@@ -50,6 +50,7 @@ group :development, :test do
   gem 'awesome_print'
   gem 'rspec-rails', '~> 3.5'
   gem 'guard-rspec', require: false # bundle exec guard init rspec
+  gem 'factory_bot_rails'
 end
 
 group :development do

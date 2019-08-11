@@ -10,7 +10,7 @@ RSpec.describe Matchup, type: :model do
 
   describe ".determine_outcome" do
     it "will determine that the system has correctly predicted a winner" do
-      matchup = Matchup.new(matchup_attributes)
+      matchup = build(:matchup)
       matchup.system_spread = "-5"
       matchup.vegas_spread = "-3"
 
