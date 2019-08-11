@@ -123,10 +123,20 @@ RSpec.describe Matchup, type: :model do
   end
 
   describe ".calculate_system_pick" do
-    it 'will determine what the spread should be' do
+    it 'factories confirmed to work correctly with associated teams' do
+      home_stats = build(:stat, :home_stats)
+      away_stats = build(:stat, :away_stats)
+      matchup = build(:matchup)
+
+      expect(matchup.home_team_id).to eq(home_stats.team_id)
+      expect(matchup.away_team_id).to eq(away_stats.team_id)
+    end
+
+    it 'will determine the system pick for a matchup' do
+      home_stats = build(:stat, :home_stats)
+      away_stats = build(:stat, :away_stats)
       matchup = build(:matchup)
       spread = matchup.calculate_system_pick
-
       expect(spread).to eq("100")
     end
   end
