@@ -49,7 +49,7 @@ RSpec.describe TeamsController, type: :controller do
 
   describe "GET #index" do
     it "returns a success response" do
-      Team.create! valid_attributes
+      create(:team, :bengals)
       get :index, params: {}, session: valid_session
       expect(response).to be_successful
     end
