@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :stat do
-    trait :home_stats do
+    trait :away_stats do
       after(:build) do |stat|
         if Team.exists?(name: "Bengals")
           stat.team_id = Team.find_by(name: "Bengals").id
@@ -30,7 +30,7 @@ FactoryBot.define do
 
     end
 
-    trait :away_stats do
+    trait :home_stats do
       after(:build) do |stat|
         if Team.exists?(name: "Browns")
           stat.team_id = Team.find_by(name: "Browns").id

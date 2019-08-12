@@ -6,8 +6,8 @@ FactoryBot.define do
     # association :away_team, factory: [:team, :browns], strategy: :create
     after(:build) do |matchup|
       # Home Team
-      if Team.exists?(name: "Bengals")
-        team = Team.find_by(name: "Bengals")
+      if Team.exists?(name: "Browns")
+        team = Team.find_by(name: "Browns")
         matchup.home_team = team
         matchup.home_team_id = team.id
       else
@@ -17,8 +17,8 @@ FactoryBot.define do
       end
 
       # Away Team
-      if Team.exists?(name: "Browns")
-        team = Team.find_by(name: "Browns")
+      if Team.exists?(name: "Bengals")
+        team = Team.find_by(name: "Bengals")
         matchup.away_team = team
         matchup.away_team_id = team.id
       else
@@ -28,10 +28,10 @@ FactoryBot.define do
       end
     end
 
-    home_team_score { "24" }
-    away_team_score { "14" }
-    system_spread { "-7" }
-    vegas_spread { "-3" }
+    home_team_score { "26" }
+    away_team_score { "18" }
+    system_spread { "-4" }
+    vegas_spread { "-9.5" }
     season { "2019" }
     week { "16" }
     note { "Factory created matchup" }

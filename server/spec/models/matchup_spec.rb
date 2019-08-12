@@ -137,7 +137,7 @@ RSpec.describe Matchup, type: :model do
       create(:stat, :away_stats)
       matchup = build(:matchup)
       spread = matchup.calculate_system_pick()
-      expect(spread).to eq(-4)
+      expect(spread.round(2)).to eq(-4.17)
     end
   end
 end
