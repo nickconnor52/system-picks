@@ -133,11 +133,11 @@ RSpec.describe Matchup, type: :model do
     end
 
     it 'will determine the system pick for a matchup' do
-      home_stats = build(:stat, :home_stats)
-      away_stats = build(:stat, :away_stats)
+      home_stats = create(:stat, :home_stats)
+      away_stats = create(:stat, :away_stats)
       matchup = build(:matchup)
-      spread = matchup.calculate_system_pick
-      expect(spread).to eq("100")
+      spread = matchup.calculate_system_pick()
+      expect(spread).to eq(-4)
     end
   end
 end

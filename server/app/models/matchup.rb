@@ -19,7 +19,7 @@ class Matchup < ApplicationRecord
   end
 
   def calculate_system_pick
-    system_spread = SpreadCalculator.new().calculate_spread(self.home_team_id, self.away_team_id)
+    system_spread = SpreadCalculator.new({matchup: self}).calculate_spread()
   end
 
   def team_covered?(team, opponent, spread)

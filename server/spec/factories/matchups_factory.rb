@@ -33,7 +33,7 @@ FactoryBot.define do
     system_spread { "-7" }
     vegas_spread { "-3" }
     season { "2019" }
-    week { "1" }
+    week { "16" }
     note { "Factory created matchup" }
     time { "1:00PM" }
     date { DateTime.now.strftime("%F") }
