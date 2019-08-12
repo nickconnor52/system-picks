@@ -4,7 +4,9 @@ Rails.application.routes.draw do
       post "weekly_stats" => "stats#show"
       resources :stats, :except => :show
     end
-    resources :matchups
+    resources :matchups do
+      get "get_system_spread", on: :member
+    end
   end
 
   resources :users
