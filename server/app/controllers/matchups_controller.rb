@@ -1,6 +1,6 @@
 class MatchupsController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :set_matchup, only: [:show, :edit, :update, :destroy, :get_system_spread]
+  before_action :set_matchup, only: [:show, :edit, :update, :destroy, :get_system_spread, :refresh_system_spread]
 
   # GET /matchups
   # GET /matchups.json
@@ -55,19 +55,25 @@ class MatchupsController < ApplicationController
 
   # GET /matchups/1/get_system_pick
   def get_system_spread
-    render :json => {
-      system_pick: @matchup.calculate_system_pick
-    }
+    begin
+      render :json => { system_pick: @matchup.calculate_system_pick }
+    rescue RuntimeError => e
+      render :json => { error: e.message }, status: 500
+    end
+  end
+
+  def refresh_system_spread
+    begin
+      @matchup.system_pick = @matchup.calculate_system_pick
+      @matchup.save!
+      render :json => @matchup
+    rescue RuntimeError => e
+      render :json => { error: e.message }, status: 500
+    end
+
   end
 
   private
-    def refresh_system_pick
-      @matchup.system_pick = @matchup.calculate_system_pick
-      @matchup.save!
-
-      render :json => @matchup
-    end
-
     # Use callbacks to share common setup or constraints between actions.
     def set_matchup
       @matchup = Matchup.find(params[:id])

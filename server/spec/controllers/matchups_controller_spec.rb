@@ -139,4 +139,24 @@ RSpec.describe MatchupsController, type: :controller do
       expect(matchup.correct_pick).to eq("true")
     end
   end
+
+  describe "POST #refresh_system_spread" do
+    it "returns an error if stat doesn't exist" do
+      matchup = Matchup.create! valid_attributes
+      post :refresh_system_spread, params: { id: matchup.id }
+      bodyJson = JSON.parse(response.body)
+      expect(response.status).to eq(500)
+      expect(bodyJson["error"]).to eq("Stats don't exist for this matchup")
+    end
+  end
+
+  describe "GET #get_system_spread" do
+    it "returns an error if stat doesn't exist" do
+      matchup = Matchup.create! valid_attributes
+      get :get_system_spread, params: { id: matchup.id }
+      bodyJson = JSON.parse(response.body)
+      expect(response.status).to eq(500)
+      expect(bodyJson["error"]).to eq("Stats don't exist for this matchup")
+    end
+  end
 end

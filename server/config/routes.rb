@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     end
     resources :matchups do
       get "get_system_spread", on: :member
+      post "refresh_system_spread", on: :member
     end
   end
 

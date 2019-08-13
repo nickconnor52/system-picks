@@ -8,6 +8,10 @@ class SpreadCalculator
     @season = attributes[:matchup].season
     @home_stats = Stat.find_by({ team_id: @home_team.id, season: @season, week: @week })
     @away_stats = Stat.find_by({ team_id: @away_team.id, season: @season, week: @week })
+
+    if @home_stats.nil? || @away_stats.nil?
+      raise "Stats don't exist for this matchup"
+    end
   end
 
   # Better to define an initializer instead of pass directly to calculate_spread?
