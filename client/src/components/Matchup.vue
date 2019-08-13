@@ -5,12 +5,12 @@
         <li>
           <a @click="clickMatchDetails()" class="nav-link text-dark" href="#">View Matchup Details</a>
         </li>
-        <li>
+        <!-- <li>
           <strong @click="showSpreadModal=true" class="nav-link text-dark pointer" href="#">Update Current Spread</strong>
-        </li>
-        <li>
+        </li> -->
+        <!-- <li>
           <strong @click="showScoreModal=true" class="nav-link text-dark pointer" href="#">Update Score</strong>
-        </li>
+        </li> -->
         <li>
           <i class="nav-link fas fa-sync-alt pointer align-center" @click="updateLine()" />
         </li>
