@@ -57,6 +57,12 @@ N/A
 Need to serve only the API to the Heroku app hosting service, this is done with the following pattern
 ```
 $: git subtree split --prefix server -b deploy
-$: git push -f heroku deploy:master
+$: git push -f heroku-[branch] deploy:master
 $: git branch -D deploy
+```
+
+Now have two separate Heroku ENV's, heroku-api & heroku-api
+The plan will be to build release and then push it to the separate branches
+```
+$: git subtree push ---prefix [directory] [heroku-app] [branch-name (release)]
 ```
