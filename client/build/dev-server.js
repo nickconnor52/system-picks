@@ -1,5 +1,7 @@
 'use strict'
 
+// Heroku will use this to fire up the app as it's listed in package.json start command
+
 require('./check-versions')()
 
 const config = require('../config')
