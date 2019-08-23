@@ -23,6 +23,10 @@ Vue.config.productionTip = false
 window.Vue = require('vue')
 window.axios = require('axios')
 
+if (process.env.NODE_ENV === 'production') {
+  axios.defaults.baseURL = process.env.API_BASE_URI || ''
+}
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
