@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190818025624) do
+ActiveRecord::Schema.define(version: 20190823151327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,6 +89,9 @@ ActiveRecord::Schema.define(version: 20190818025624) do
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "email", null: false
+    t.string "password_digest", null: false
+    t.boolean "admin", default: false
   end
 
   add_foreign_key "matchups", "teams", column: "away_team_id", primary_key: "team_id", name: "matchups_away_team_fkey"
