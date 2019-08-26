@@ -26,7 +26,7 @@ module Systempicks
     # Open up Rack::Cors to the world (for now)
     Rails.application.config.middleware.insert_before 0, Rack::Cors do
       allow do
-        origins 'http://localhost:8080, http://system-picks-api.herokuapp.com'
+        origins 'http://localhost:8080, http://system-picks.herokuapp.com'
         resource '*',
           headers: :any,
           credentials: true,
