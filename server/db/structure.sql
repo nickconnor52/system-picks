@@ -185,7 +185,10 @@ CREATE TABLE public.teams (
 CREATE TABLE public.users (
     id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    email character varying NOT NULL,
+    password_digest character varying NOT NULL,
+    admin boolean DEFAULT false
 );
 
 
@@ -309,6 +312,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190803055015'),
 ('20190803063325'),
 ('20190808023545'),
-('20190809022644');
+('20190809022644'),
+('20190818025624'),
+('20190823151327');
 
 

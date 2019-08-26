@@ -12,6 +12,9 @@ import HighchartsVue from 'highcharts-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'es6-promise/auto'
+// Authentication Axios Wrapper set-up
+import VueAxios from 'vue-axios'
+import { securedAxiosInstance, plainAxiosInstance } from './services/axios-wrapper.js'
 
 require('highcharts/modules/no-data-to-display')(Highcharts)
 
@@ -23,6 +26,11 @@ Vue.config.productionTip = false
 window.Vue = require('vue')
 window.axios = require('axios')
 
+Vue.use(VueAxios, {
+  secured: securedAxiosInstance,
+  plain: plainAxiosInstance
+})
+
 if (process.env.NODE_ENV === 'production') {
   axios.defaults.baseURL = process.env.API_BASE_URI || ''
 }
@@ -31,6 +39,8 @@ if (process.env.NODE_ENV === 'production') {
 new Vue({
   el: '#app',
   router,
+  securedAxiosInstance,
+  plainAxiosInstance,
   template: '<App/>',
   components: { App },
   store,
