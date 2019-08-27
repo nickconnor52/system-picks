@@ -8,9 +8,7 @@
       </nav>
     </header> -->
   <b-navbar id="global-navbar" toggleable="lg" type="dark" variant="primary">
-
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-brand class="nav-item logo" href="/">The System</b-navbar-brand>
       <b-navbar-nav>
@@ -18,14 +16,14 @@
         <b-nav-item class="nav-item" href="/pick-tracker">Pick Tracker</b-nav-item>
       </b-navbar-nav>
 
-
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
-        <b-nav-item-dropdown right>
+        <b-nav-item-dropdown v-if="signedIn" right>
           <!-- Using 'button-content' slot -->
           <template slot="button-content"><em>User</em></template>
           <b-dropdown-item @click="signOut">Sign Out</b-dropdown-item>
         </b-nav-item-dropdown>
+        <b-nav-item v-else class="nav-item" href="/signin">Sign In</b-nav-item>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
@@ -44,6 +42,9 @@ export default {
     },
     activeLink3 () {
       return this.$route.path === '/pick-tracker/'
+    },
+    signedIn () {
+      return localStorage.signedIn
     }
   },
   methods: {
