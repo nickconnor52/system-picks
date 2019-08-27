@@ -18,7 +18,7 @@
 
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
-        <b-nav-item-dropdown v-if="signedIn" right>
+        <b-nav-item-dropdown v-if="userSignedIn" right>
           <!-- Using 'button-content' slot -->
           <template slot="button-content"><em>User</em></template>
           <b-dropdown-item @click="signOut">Sign Out</b-dropdown-item>
@@ -30,9 +30,14 @@
 </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'navbar',
   computed: {
+    ...mapState([
+      'userSignedIn'
+    ]),
     activeLink1 () {
       return this.$route.path === '/'
     },
@@ -42,9 +47,6 @@ export default {
     },
     activeLink3 () {
       return this.$route.path === '/pick-tracker/'
-    },
-    signedIn () {
-      return localStorage.signedIn
     }
   },
   methods: {
@@ -52,7 +54,7 @@ export default {
       this.$http.secured.delete('/api/signin')
         .then(response => {
           delete localStorage.csrf
-          delete localStorage.signedIn
+          this.$store.commit('setUserSignedIn', false)
           this.$router.replace('/')
         })
         .catch(error => this.setError(error, 'Cannot sign out'))

@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'Signup',
   data () {
@@ -30,6 +32,11 @@ export default {
       password_confirmation: '',
       error: ''
     }
+  },
+  computed: {
+    ...mapState([
+      'userSignedIn'
+    ])
   },
   created () {
     this.checkSignedIn()
@@ -49,17 +56,17 @@ export default {
         return
       }
       localStorage.csrf = response.data.csrf
-      localStorage.signedIn = true
+      this.$store.commit('setUserSignedIn', true)
       this.error = ''
       this.$router.replace('/matchups')
     },
     signupFailed (error) {
       this.error = (error.response && error.response.data && error.response.data.error) || 'Something went wrong'
       delete localStorage.csrf
-      delete localStorage.signedIn
+      this.$store.commit('setUserSignedIn', false)
     },
     checkSignedIn () {
-      if (localStorage.signedIn) {
+      if (this.userSignedIn) {
         this.$router.replace('/matchups')
       }
     }

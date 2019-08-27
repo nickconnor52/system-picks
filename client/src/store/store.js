@@ -5,12 +5,16 @@ Vue.use(Vuex)
 
 const state = {
   luckyNumber: '52',
-  activeWeek: '17'
+  activeWeek: '17',
+  userSignedIn: false
 }
 const getters = { }
 const mutations = {
   setActiveWeek (state, data) {
     state.activeWeek = data
+  },
+  setUserSignedIn (state, data) {
+    state.userSignedIn = data
   }
 }
 const actions = {
