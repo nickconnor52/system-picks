@@ -15,7 +15,7 @@
     </div>
     <button type="submit" class="btn btn-primary mb-3">Sign up</button>
     <div>
-      <router-link to="/">Sign in</router-link>
+      <router-link class="link" to="/">Sign in</router-link>
     </div>
   </form>
 </template>
@@ -68,6 +68,15 @@ export default {
 </script>
 
 <style lang="css">
+.btn-primary {
+  background-color: #35495E;
+  border-color: #35495E;
+}
+
+.link {
+  color: #35495E;
+}
+
 .form-signup {
   width: 70%;
   max-width: 500px;
