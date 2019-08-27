@@ -61,6 +61,10 @@ export default {
 }
 </script>
 <style>
+#global-navbar {
+  background-color: #35495E !important;
+}
+
 #global-navbar .nav-item {
   /* background-color: #9e253196; */
   margin-left: 3px;
