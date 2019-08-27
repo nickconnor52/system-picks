@@ -1,8 +1,5 @@
 <template>
   <div class="container">
-    <div class="sign-out float-right">
-      <label @click="signOut">Sign out</label>
-    </div>
     <h1>The System</h1>
     <h4 class="font-weight-light font-italic">There's always an edge, we're here to find it.</h4>
     <hr>
@@ -38,17 +35,6 @@ export default {
     ...mapState([
       'luckyNumber'
     ])
-  },
-  methods: {
-    signOut () {
-      this.$http.secured.delete('/api/signin')
-        .then(response => {
-          delete localStorage.csrf
-          delete localStorage.signedIn
-          this.$router.replace('/')
-        })
-        .catch(error => this.setError(error, 'Cannot sign out'))
-    }
   }
 }
 </script>
