@@ -16,6 +16,11 @@ Rails.application.routes.draw do
     post 'signin', controller: :signin, action: :create
     post 'signup', controller: :signup, action: :create
     delete 'signin', controller: :signin, action: :destroy
+
+
+    namespace :scrape do
+      post 'football_outsiders' => 'football_outsiders#scrape'
+    end
   end
 
 
