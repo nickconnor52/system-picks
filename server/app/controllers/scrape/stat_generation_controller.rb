@@ -48,30 +48,85 @@ class Scrape::StatGenerationController < ApplicationController
       end
     end
 
-    # espn_give_take_stats_hash = get_espn_stats
-    # espn_offensive_third_down_stats_hash = get_espn_stats
-    # espn_defensive_third_down_stats_hash = get_espn_stats
-    # espn_offensive_yards_stats_hash = get_espn_stats
-    # espn_defensive_yards_stats_hash = get_espn_stats
+    # ESPN Stats
+    # Give Take
+
+    espn_give_take_stats_hash = get_espn_give_take_stats
+    espn_give_take_stats_hash.each do |stat|
+      drive_team = stat["Team"]
+      team = Team.find_by_sql ["SELECT * FROM teams WHERE (name) LIKE ?", "%#{drive_team}%"]
+      existing_stat_hash = final_stats.detect {|needle| needle[:team] == team.to_param}
+
+      unless existing_stat_hash.nil?
+        existing_stat_hash[:give_take_diff] = stat["DIFF"]
+      end
+    end
+
+    # ESPN Stats
+    # OFF 3rd Down
+
+    espn_offensive_third_down_stats_hash = get_espn_offensive_third_stats
+    espn_offensive_third_down_stats_hash.each do |stat|
+      drive_team = stat["Team"]
+      team = Team.find_by_sql ["SELECT * FROM teams WHERE (name) LIKE ?", "%#{drive_team}%"]
+      existing_stat_hash = final_stats.detect {|needle| needle[:team] == team.to_param}
+
+      unless existing_stat_hash.nil?
+        existing_stat_hash[:off_3rd_pct] = stat["PCT"]
+      end
+    end
+
+    # ESPN Stats
+    # DEF 3rd Down
+    espn_defensive_third_down_stats_hash = get_espn_defensive_third_stats
+    espn_defensive_third_down_stats_hash.each do |stat|
+      drive_team = stat["Team"]
+      team = Team.find_by_sql ["SELECT * FROM teams WHERE (name) LIKE ?", "%#{drive_team}%"]
+      existing_stat_hash = final_stats.detect {|needle| needle[:team] == team.to_param}
+
+      unless existing_stat_hash.nil?
+        existing_stat_hash[:def_3rd_pct] = stat["PCT"]
+      end
+    end
+
+    # ESPN Stats
+    # OFF Yards Stats
+    espn_offensive_yards_stats_hash = get_espn_offensive_yardage_stats
+    espn_offensive_yards_stats_hash.each do |stat|
+      drive_team = stat["Team"]
+      team = Team.find_by_sql ["SELECT * FROM teams WHERE (name) LIKE ?", "%#{drive_team}%"]
+      existing_stat_hash = final_stats.detect {|needle| needle[:team] == team.to_param}
+
+      unless existing_stat_hash.nil?
+        existing_stat_hash[:off_pass_yds_game] = stat["YDS/G4"]
+        existing_stat_hash[:off_rush_yds_game] = stat["YDS/G6"]
+        existing_stat_hash[:off_pts_game] = stat["PTS/G8"]
+      end
+    end
+
+    # ESPN Stats
+    # DEF Yards Stats
+    espn_defensive_yards_stats_hash = get_espn_defensive_yardage_stats
+    espn_defensive_yards_stats_hash.each do |stat|
+      drive_team = stat["Team"]
+      team = Team.find_by_sql ["SELECT * FROM teams WHERE (name) LIKE ?", "%#{drive_team}%"]
+      existing_stat_hash = final_stats.detect {|needle| needle[:team] == team.to_param}
+
+      unless existing_stat_hash.nil?
+        existing_stat_hash[:def_pass_yds_game] = stat["YDS/G4"]
+        existing_stat_hash[:def_rush_yds_game] = stat["YDS/G6"]
+        existing_stat_hash[:def_pts_game] = stat["PTS/G8"]
+      end
+    end
+
     # team_rankings_offensive_rza_stats_hash = get_other_stats
     # team_rankings_defensive_rza_stats_hash = get_other_stats
 
     # stat_attrs = {
-    #   :team_id => team.to_param,
-    #   :season => '2019',
-    #   :week => '0',
-    #   :def_3rd_pct => '',
-    #   :def_pass_yds_game => '270.6',
-    #   :def_pts_game => '',
     #   :def_RZA_game => '',
-    #   :def_rush_yds_game => '',
-    #   :give_take_diff => '',
-    #   :off_3rd_pct => '',
-    #   :off_pass_yds_game => '',
-    #   :off_pts_game => '',
     #   :off_RZA_game => '',
-    #   :off_rush_yds_game => '',
     # }
+    binding.pry
 
     render :json => {:success => true} unless false
   end
@@ -134,5 +189,164 @@ class Scrape::StatGenerationController < ApplicationController
     end
 
     hash_build
+  end
+
+  def get_espn_give_take_stats
+    doc = Nokogiri::HTML(open("https://www.espn.com/nfl/stats/team/_/view/turnovers/season/2018/seasontype/2"))
+
+    # Grab the second table from the site
+    table = doc.css('table')[0]
+    teams_column = table.search('.v-top').first
+
+    teams_array = teams_column.search('tbody tr')
+    rows = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/tbody').search('tr')
+    headers = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/thead[2]/tr').search('th')
+
+
+    hash_build = []
+    rows.each do |row|
+      row_hash = convert_row_to_hash(headers, row)
+      hash_build << row_hash
+    end
+
+    hash_build.each_with_index do |hash, index|
+      team = teams_array[index]
+      team_name = team.text.split.last
+      hash["Team"] = team_name
+    end
+
+    hash_build
+  end
+
+  def get_espn_offensive_third_stats
+    doc = Nokogiri::HTML(open("https://www.espn.com/nfl/stats/team/_/season/2018/seasontype/2/stat/downs"))
+
+    # Grab the second table from the site
+    table = doc.css('table')[0]
+    teams_column = table.search('.v-top').first
+
+    teams_array = teams_column.search('tbody tr')
+    rows = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/tbody').search('tr')
+    headers = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/thead[2]/tr').search('th')
+
+
+    hash_build = []
+    rows.each do |row|
+      row_hash = convert_percentage_row_to_hash(headers, row)
+      hash_build << row_hash
+    end
+
+    hash_build.each_with_index do |hash, index|
+      team = teams_array[index]
+      team_name = team.text.split.last
+      hash["Team"] = team_name
+    end
+
+    hash_build
+  end
+
+  def get_espn_defensive_third_stats
+    doc = Nokogiri::HTML(open("https://www.espn.com/nfl/stats/team/_/view/defense/season/2018/seasontype/2/stat/downs"))
+
+    # Grab the second table from the site
+    table = doc.css('table')[0]
+    teams_column = table.search('.v-top').first
+
+    teams_array = teams_column.search('tbody tr')
+    rows = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/tbody').search('tr')
+    headers = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/thead[2]/tr').search('th')
+
+
+    hash_build = []
+    rows.each do |row|
+      row_hash = convert_percentage_row_to_hash(headers, row)
+      hash_build << row_hash
+    end
+
+    hash_build.each_with_index do |hash, index|
+      team = teams_array[index]
+      team_name = team.text.split.last
+      hash["Team"] = team_name
+    end
+
+    hash_build
+  end
+
+
+  def get_espn_offensive_yardage_stats
+    doc = Nokogiri::HTML(open("https://www.espn.com/nfl/stats/team/_/view/offense/season/2018/seasontype/2"))
+
+    # Grab the second table from the site
+    table = doc.css('table')[0]
+    teams_column = table.search('.v-top').first
+
+    teams_array = teams_column.search('tbody tr')
+    rows = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/tbody').search('tr')
+    headers = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/thead[2]/tr').search('th')
+
+
+    hash_build = []
+    rows.each do |row|
+      row_hash = convert_yardage_row_to_hash(headers, row)
+      hash_build << row_hash
+    end
+
+    hash_build.each_with_index do |hash, index|
+      team = teams_array[index]
+      team_name = team.text.split.last
+      hash["Team"] = team_name
+    end
+
+    hash_build
+  end
+
+  def get_espn_defensive_yardage_stats
+    doc = Nokogiri::HTML(open("https://www.espn.com/nfl/stats/team/_/view/defense/season/2018/seasontype/2"))
+
+    # Grab the second table from the site
+    table = doc.css('table')[0]
+    teams_column = table.search('.v-top').first
+
+    teams_array = teams_column.search('tbody tr')
+    rows = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/tbody').search('tr')
+    headers = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/thead[2]/tr').search('th')
+
+
+    hash_build = []
+    rows.each do |row|
+      row_hash = convert_yardage_row_to_hash(headers, row)
+      hash_build << row_hash
+    end
+
+    hash_build.each_with_index do |hash, index|
+      team = teams_array[index]
+      team_name = team.text.split.last
+      hash["Team"] = team_name
+    end
+
+    hash_build
+  end
+
+  def convert_percentage_row_to_hash(headers, row)
+    cells = row.search('td')
+    row_hash = {}
+    cells.each_with_index do |cell, index|
+      header_name = headers[index].text.squish # Strip \n and \t characters (and white space)
+      row_hash[header_name] = cell.text.squish
+      if index > 7
+        break # There are duplicate PCTs for 3rd downs and 4th downs
+      end
+    end
+    row_hash
+  end
+
+  def convert_yardage_row_to_hash(headers, row)
+    cells = row.search('td')
+    row_hash = {}
+    cells.each_with_index do |cell, index|
+      header_name = headers[index].text.squish # Strip \n and \t characters (and white space)
+      row_hash[header_name << index.to_s] = cell.text.squish # index due to multiple percentages
+    end
+    row_hash
   end
 end
