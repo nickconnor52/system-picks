@@ -153,10 +153,19 @@ class Scrape::StatGenerationController < ApplicationController
       end
     end
 
+    persist_stats final_stats
+
     render :json => final_stats
   end
 
   private
+
+  def persist_stats(final_stats)
+    final_stats.each do |stat|
+      stat[:team] = Team.find(stat[:team])
+      Stat.create!(stat)
+    end
+  end
 
   def convert_row_to_hash(headers, row)
     cells = row.search('td')
