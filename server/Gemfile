@@ -37,6 +37,8 @@ gem 'paranoia', '~> 2.2'
 
 gem 'rack-cors'
 
+gem 'nokogiri'
+
 # Authentication
 gem 'devise'
 gem 'bcrypt'

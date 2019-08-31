@@ -278,6 +278,7 @@ DEPENDENCIES
   jbuilder (~> 2.5)
   jwt_sessions (~> 2)
   listen (>= 3.0.5, < 3.2)
+  nokogiri
   paranoia (~> 2.2)
   pg (~> 1.1)
   pry

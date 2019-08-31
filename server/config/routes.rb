@@ -19,7 +19,7 @@ Rails.application.routes.draw do
 
 
     namespace :scrape do
-      post 'football_outsiders' => 'football_outsiders#scrape'
+      post 'football_outsiders' => 'stat_generation#scrape'
     end
   end
 
