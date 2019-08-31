@@ -119,16 +119,41 @@ class Scrape::StatGenerationController < ApplicationController
       end
     end
 
-    # team_rankings_offensive_rza_stats_hash = get_other_stats
-    # team_rankings_defensive_rza_stats_hash = get_other_stats
+    # TeamRankings Stats
+    # OFF RZA
+    team_rankings_offensive_rza_stats_hash = get_off_team_rankings_RZ_stats
+    team_rankings_offensive_rza_stats_hash.each do |stat|
+      drive_team = stat["Team"]
+      team = Team.find_by_sql ["SELECT * FROM teams WHERE (location) LIKE ?", "%#{drive_team}%"]
+      if team.empty?
+        team = Team.find_by_sql ["SELECT * FROM teams WHERE (nickname) LIKE ?", "%#{drive_team}%"]
+      end
 
-    # stat_attrs = {
-    #   :def_RZA_game => '',
-    #   :off_RZA_game => '',
-    # }
-    binding.pry
+      existing_stat_hash = final_stats.detect {|needle| needle[:team] == team.to_param}
 
-    render :json => {:success => true} unless false
+      unless existing_stat_hash.nil?
+        existing_stat_hash[:off_RZA_game] = stat["2018"]
+      end
+    end
+
+    # TeamRankings Stats
+    # DEF RZA
+    team_rankings_defensive_rza_stats_hash = get_def_team_rankings_RZ_stats
+    team_rankings_defensive_rza_stats_hash.each do |stat|
+      drive_team = stat["Team"]
+      team = Team.find_by_sql ["SELECT * FROM teams WHERE (location) LIKE ?", "%#{drive_team}%"]
+      if team.empty?
+        team = Team.find_by_sql ["SELECT * FROM teams WHERE (nickname) LIKE ?", "%#{drive_team}%"]
+      end
+
+      existing_stat_hash = final_stats.detect {|needle| needle[:team] == team.to_param}
+
+      unless existing_stat_hash.nil?
+        existing_stat_hash[:def_RZA_game] = stat["2018"]
+      end
+    end
+
+    render :json => final_stats
   end
 
   private
@@ -322,6 +347,42 @@ class Scrape::StatGenerationController < ApplicationController
       team = teams_array[index]
       team_name = team.text.split.last
       hash["Team"] = team_name
+    end
+
+    hash_build
+  end
+
+  def get_off_team_rankings_RZ_stats
+    doc = Nokogiri::HTML(open("https://www.teamrankings.com/nfl/stat/red-zone-scoring-attempts-per-game"))
+
+    # Grab the second table from the site
+    table = doc.css('table')[0]
+    rows = table.search('tbody').search('tr')
+    headers = table.search('thead tr').search('th')
+
+
+    hash_build = []
+    rows.each do |row|
+      row_hash = convert_row_to_hash(headers, row)
+      hash_build << row_hash
+    end
+
+    hash_build
+  end
+
+  def get_def_team_rankings_RZ_stats
+    doc = Nokogiri::HTML(open("https://www.teamrankings.com/nfl/stat/opponent-red-zone-scoring-attempts-per-game"))
+
+    # Grab the second table from the site
+    table = doc.css('table')[0]
+    rows = table.search('tbody').search('tr')
+    headers = table.search('thead tr').search('th')
+
+
+    hash_build = []
+    rows.each do |row|
+      row_hash = convert_row_to_hash(headers, row)
+      hash_build << row_hash
     end
 
     hash_build
