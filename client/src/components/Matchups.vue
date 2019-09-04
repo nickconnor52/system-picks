@@ -8,8 +8,8 @@
       <h5 class="col-md-4" v-if="weekMatchups.length !== 0">Weekly Record: <span>{{ weeklyRecord.wins }} - {{ weeklyRecord.losses }} - {{ weeklyRecord.pushes }}</span></h5>
     </div>
     <div class="row justify-content-end">
-      <button type="button" class="btn btn-primary" @click="syncVegasLines" style="margin-right: 10px"><i class="fa fa-sync-alt" style="margin-right: 10px"></i>Update Vegas Lines</button>
-      <!-- <button type="button" class="btn btn-primary" @click="createNewWeek"><i class="fa fa-plus" style="margin-right: 10px"/>Add Week</button> -->
+      <button v-if="isAdmin" type="button" class="btn btn-primary" @click="syncVegasLines" style="margin-right: 10px"><i class="fa fa-sync-alt" style="margin-right: 10px"></i>Update Vegas Lines</button>
+      <button v-if="isAdmin" type="button" class="btn btn-primary" @click="createNewWeek"><i class="fa fa-plus" style="margin-right: 10px"/>Add Week</button>
     </div>
     <div class="row week-tab">
       <ul class="nav justify-content-center">
@@ -26,9 +26,9 @@
       <div class="col-md-12 card" style="width: 18rem;">
         <div class="card-body container-fluid">
           <div class="row justify-content-md-center">
-            <!-- <button type="button" class="btn btn-primary" style="margin-bottom: 10px" @click="showModal = true">
+            <button v-if="isAdmin" type="button" class="btn btn-primary" style="margin-bottom: 10px" @click="showModal = true">
               Add Matchup
-            </button> -->
+            </button>
           </div>
           <div v-if="weekMatchups.length === 0" class="card">
               <div class="card-header">
@@ -125,8 +125,12 @@ export default {
   },
   computed: {
     ...mapState([
-      'activeWeek'
+      'activeWeek',
+      'activeUser'
     ]),
+    isAdmin () {
+      return this.activeUser.admin
+    },
     options () {
       return this.teams.map(team => team.name)
     },

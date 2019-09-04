@@ -5,17 +5,17 @@
         <li>
           <a @click="clickMatchDetails()" class="nav-link text-dark" href="#">View Matchup Details</a>
         </li>
-        <!-- <li>
-          <strong @click="showSpreadModal=true" class="nav-link text-dark pointer" href="#">Update Current Spread</strong>
-        </li> -->
-        <!-- <li>
-          <strong @click="showScoreModal=true" class="nav-link text-dark pointer" href="#">Update Score</strong>
-        </li> -->
         <li>
-          <i class="nav-link fas fa-sync-alt pointer align-center" @click="updateLine()" />
+          <strong v-if="isAdmin" @click="showSpreadModal=true" class="nav-link text-dark pointer" href="#">Update Current Spread</strong>
         </li>
         <li>
-          <i class="nav-link far fa-edit pointer align-center" @click="showNoteModal=true" />
+          <strong v-if="isAdmin" @click="showScoreModal=true" class="nav-link text-dark pointer" href="#">Update Score</strong>
+        </li>
+        <li>
+          <i v-if="isAdmin" class="nav-link fas fa-sync-alt pointer align-center" @click="updateLine()" />
+        </li>
+        <li>
+          <i v-if="isAdmin" class="nav-link far fa-edit pointer align-center" @click="showNoteModal=true" />
         </li>
     </ul>
   </div>
@@ -258,8 +258,12 @@ export default {
   },
   computed: {
     ...mapState([
-      'activeWeek'
+      'activeWeek',
+      'activeUser'
     ]),
+    isAdmin () {
+      return this.activeUser.admin
+    },
     teams () {
       return [this.awayTeamStats, this.homeTeamStats]
     },
