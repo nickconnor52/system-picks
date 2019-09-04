@@ -54,7 +54,8 @@ export default {
       this.$http.secured.delete('/api/signin')
         .then(response => {
           delete localStorage.csrf
-          this.$store.commit('setUserSignedIn', false)
+          const payload = {signedIn: false, user: {}}
+          this.$store.commit('setUserSignedIn', payload)
           this.$router.replace('/')
         })
         .catch(error => this.setError(error, 'Cannot sign out'))

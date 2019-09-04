@@ -51,14 +51,17 @@ export default {
         return
       }
       localStorage.csrf = response.data.csrf
-      this.$store.commit('setUserSignedIn', true)
+      const user = response.data.user
+      const payload = {signedIn: true, user: user}
+      this.$store.commit('setUserSignedIn', payload)
       this.error = ''
       this.$router.replace('/matchups')
     },
     signinFailed (error) {
       this.error = (error.response && error.response.data && error.response.data.error) || ''
       delete localStorage.csrf
-      this.$store.commit('setUserSignedIn', false)
+      const payload = {signedIn: false, user: {}}
+      this.$store.commit('setUserSignedIn', payload)
     },
     checkSignedIn () {
       if (this.userSignedIn) {

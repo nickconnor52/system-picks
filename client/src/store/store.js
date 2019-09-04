@@ -1,20 +1,23 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
 const state = {
   luckyNumber: '52',
   activeWeek: '17',
-  userSignedIn: false
+  userSignedIn: false,
+  activeUser: {}
 }
 const getters = { }
 const mutations = {
   setActiveWeek (state, data) {
     state.activeWeek = data
   },
-  setUserSignedIn (state, data) {
-    state.userSignedIn = data
+  setUserSignedIn (state, payload) {
+    state.userSignedIn = payload.signedIn
+    state.activeUser = payload.user
   }
 }
 const actions = {
@@ -22,6 +25,9 @@ const actions = {
 }
 
 export default new Vuex.Store({
+  plugins: [createPersistedState({
+    paths: ['userSignedIn', 'activeUser']
+  })],
   state,
   // Current state of the application lies here.
   getters,
