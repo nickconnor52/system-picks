@@ -432,7 +432,7 @@ export default {
     },
     updateLine () {
       axios({
-        url: '/api/matchups/updateLine',
+        url: '/api/matchups/' + this.matchup.matchup_id + '/refresh_system_spread',
         method: 'POST',
         data: this.matchup
       }).then(response => {

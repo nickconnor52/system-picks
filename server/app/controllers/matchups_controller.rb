@@ -64,7 +64,7 @@ class MatchupsController < ApplicationController
 
   def refresh_system_spread
     begin
-      @matchup.system_pick = @matchup.calculate_system_pick
+      @matchup.system_spread = @matchup.calculate_system_pick
       @matchup.save!
       render :json => @matchup
     rescue RuntimeError => e
