@@ -452,8 +452,6 @@ export default {
         data: this.matchup
       }).then(response => {
         this.showScoreModal = false
-        // this.matchup.home_team_score = response.data.home_team_score
-        // this.matchup.away_team_score = response.data.away_team_score
         this.matchup.correct_pick = response.data.correct_pick
         this.home_team_score = ''
         this.away_team_score = ''
@@ -464,14 +462,14 @@ export default {
       })
     },
     updateSpread () {
-      this.matchup.currentSpread = this.updatedSpread <= 0 ? this.updatedSpread : '+' + this.updatedSpread
+      this.matchup.vegas_spread = this.updatedSpread <= 0 ? this.updatedSpread : '+' + this.updatedSpread
       axios({
-        url: '/api/matchups/updateSpread',
-        method: 'POST',
+        url: '/api/matchups/' + this.matchup.matchup_id,
+        method: 'PUT',
         data: this.matchup
       }).then(response => {
         this.showSpreadModal = false
-        this.matchup.spreadHistory = response.data.spreadHistory
+        this.matchup.spread_history = response.data.spread_history
         this.matchup.vegas_spread = response.data.vegas_spread
         this.updatedSpread = ''
       }).catch(response => {

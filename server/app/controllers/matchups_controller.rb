@@ -36,7 +36,12 @@ class MatchupsController < ApplicationController
   # PATCH/PUT /matchups/1.json
   def update
     # Vudo: Recalculate win or loss value based on updated score (if there is one) -- make own endpoint for score?
-    @matchup.update(matchup_params)
+    update_params = matchup_params
+    unless @matchup.spread_history.blank?
+      spread_history = append_spread_to_matchup
+      update_params[:spread_history] = spread_history
+    end
+    @matchup.update(update_params)
     @matchup.reload
 
     if !(["home_team_score", "away_team_score", "vegas_spread", "system_spread"] & matchup_params.keys).empty?
@@ -74,6 +79,15 @@ class MatchupsController < ApplicationController
   end
 
   private
+    def append_spread_to_matchup
+      parsed_spread_history = JSON.parse(@matchup.spread_history)
+      spread_object = {
+        spread: matchup_params[:vegas_spread],
+        date: DateTime.now.strftime('%Q').to_f,
+      }
+      parsed_spread_history << spread_object
+      return parsed_spread_history.to_json
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_matchup
       @matchup = Matchup.find(params[:id])
@@ -81,6 +95,6 @@ class MatchupsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def matchup_params
-      params.require(:matchup).permit(:home_team_score, :away_team_score, :note)
+      params.require(:matchup).permit(:home_team_score, :away_team_score, :note, :vegas_spread)
     end
 end
