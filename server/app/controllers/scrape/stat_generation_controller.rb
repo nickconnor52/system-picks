@@ -163,7 +163,8 @@ class Scrape::StatGenerationController < ApplicationController
   def persist_stats(final_stats)
     final_stats.each do |stat|
       stat[:team] = Team.find(stat[:team])
-      Stat.create!(stat)
+      upserted_stat = Stat.where(team: stat[:team].to_param, week: stat[:week], season: stat[:season]).first_or_initialize
+      upserted_stat.update(stat)
     end
   end
 
