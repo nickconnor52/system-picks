@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190905025708) do
+ActiveRecord::Schema.define(version: 20190905210425) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20190905025708) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.text "custom_weight", default: "0"
   end
 
   create_table "schedules", primary_key: "schedule_id", id: :text, default: -> { "nextval('schedule_id_seq'::regclass)" }, force: :cascade do |t|

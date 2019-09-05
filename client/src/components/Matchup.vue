@@ -6,6 +6,9 @@
           <a @click="clickMatchDetails()" class="nav-link text-dark" href="#">View Matchup Details</a>
         </li>
         <li>
+          <strong v-if="isAdmin" @click="showCustomWeightModal=true" class="nav-link text-dark pointer" href="#">Add Custom Spread Weight</strong>
+        </li>
+        <li>
           <strong v-if="isAdmin" @click="showSpreadModal=true" class="nav-link text-dark pointer" href="#">Update Current Spread</strong>
         </li>
         <li>
@@ -55,6 +58,40 @@
     <div v-if="matchup.note">
       <small><strong>Matchup Note: </strong>{{ matchup.note }}</small>
     </div>
+    <div v-if="matchup.custom_weight !== '0'">
+      <small><strong>Custom Weight: </strong>{{ matchup.custom_weight }}</small>
+    </div>
+  </div>
+
+  <!-- Custom Weight Modal -->
+  <div v-if="showCustomWeightModal">
+    <transition name="modal">
+      <div class="modal-mask">
+        <div class="modal-wrapper">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" style="width: 100%;">{{ matchup.away_team.name }} v {{ matchup.home_team.name }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="showCustomWeightModal = false">
+                <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body container">
+                <div class="row justify-content-center">
+                  <label class="col-md-4 col-form-label" for="spread">Spread Custom Weight:</label>
+                  <input type="text" id="spread" class="form-control col-md-4" v-model="customWeight" placeholder="Custom Weighting" style="margin-left: 15px"/>
+                </div>
+                <br>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @click="showCustomWeightModal = false">Close</button>
+                <button type="button" class="btn btn-primary" :disabled="customWeight === ''" @click="updateCustomWeight()">Submit Weighting</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 
  <!-- Spread Modal -->
@@ -240,11 +277,13 @@ export default {
       showNoteModal: false,
       showMatchupModal: false,
       showSpreadModal: false,
+      showCustomWeightModal: false,
       home_team_score: '',
       away_team_score: '',
       updatedSpread: '',
       homeTeamStats: {},
       awayTeamStats: {},
+      customWeight: '',
       note: ''
     }
   },
@@ -457,6 +496,20 @@ export default {
         this.away_team_score = ''
         this.$forceUpdate()
         console.log('Score Updated!')
+      }).catch(response => {
+        console.log(response)
+      })
+    },
+    updateCustomWeight () {
+      this.matchup.custom_weight = this.customWeight
+      axios({
+        url: '/api/matchups/' + this.matchup.matchup_id,
+        method: 'PUT',
+        data: this.matchup
+      }).then(response => {
+        this.showCustomWeightModal = false
+        this.matchup.custom_weight = response.data.custom_weight
+        this.customWeight = ''
       }).catch(response => {
         console.log(response)
       })

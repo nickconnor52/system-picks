@@ -8,6 +8,7 @@ class SpreadCalculator
     @season = attributes[:matchup].season
     @home_stats = Stat.find_by({ team_id: @home_team.id, season: @season, week: @week })
     @away_stats = Stat.find_by({ team_id: @away_team.id, season: @season, week: @week })
+    @custom_weight = attributes[:matchup].custom_weight.to_f
 
     if @home_stats.nil? || @away_stats.nil?
       raise "Stats don't exist for this matchup"
@@ -88,7 +89,7 @@ class SpreadCalculator
     home_final_score = (home_weighted_total + home_team[:adjusted_points_per_game]) - home_ppg_adjust
     away_final_score = (away_weighted_total + away_team[:adjusted_points_per_game]) - away_ppg_adjust
 
-    return ( home_final_score - away_final_score ) * -1
+    return (( home_final_score - away_final_score ) * -1) + @custom_weight
 
   end
 
