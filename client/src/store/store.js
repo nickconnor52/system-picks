@@ -6,9 +6,10 @@ Vue.use(Vuex)
 
 const state = {
   luckyNumber: '52',
-  activeWeek: '17',
+  activeWeek: '1',
   userSignedIn: false,
-  activeUser: {}
+  activeUser: {},
+  chosenSeason: '2019'
 }
 const getters = { }
 const mutations = {
@@ -18,6 +19,10 @@ const mutations = {
   setUserSignedIn (state, payload) {
     state.userSignedIn = payload.signedIn
     state.activeUser = payload.user
+  },
+  updateSeason (state, value) {
+    state.chosenSeason = value
+    state.activeWeek = '1'
   }
 }
 const actions = {
@@ -26,7 +31,7 @@ const actions = {
 
 export default new Vuex.Store({
   plugins: [createPersistedState({
-    paths: ['userSignedIn', 'activeUser']
+    paths: ['userSignedIn', 'activeUser', 'activeWeek', 'chosenSeason']
   })],
   state,
   // Current state of the application lies here.

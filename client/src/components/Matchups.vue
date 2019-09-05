@@ -123,8 +123,7 @@ export default {
       homeSelected: null,
       awaySelected: null,
       matchupLine: '',
-      chosenWeekNumber: '',
-      chosenSeason: '2019'
+      chosenWeekNumber: ''
     }
   },
   computed: {
@@ -132,6 +131,14 @@ export default {
       'activeWeek',
       'activeUser'
     ]),
+    chosenSeason: {
+      get: function () {
+        return this.$store.state.chosenSeason
+      },
+      set: function (value) {
+        this.$store.commit('updateSeason', value)
+      }
+    },
     isAdmin () {
       return this.activeUser.admin
     },
@@ -221,9 +228,9 @@ export default {
       this.weekCount.push(latestWeek)
       this.$store.commit('setActiveWeek', latestWeek)
       axios({
-        url: '/api/matchups/addAllWeeklyMatchups',
+        url: '/api/schedule/add_weekly_matchups',
         method: 'POST',
-        data: { week: latestWeek }
+        data: { week: latestWeek, season: '2019' }
       })
         .then(response => {
           console.log(response)

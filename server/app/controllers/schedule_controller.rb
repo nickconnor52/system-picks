@@ -12,7 +12,7 @@ class ScheduleController < ApplicationController
         end
       end
 
-      render :json => { success: true }, status: 200
+      render :json => { success: true, matchups: Matchup.all }, status: 200
     end
 
     private
