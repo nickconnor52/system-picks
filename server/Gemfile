@@ -38,6 +38,7 @@ gem 'paranoia', '~> 2.2'
 gem 'rack-cors'
 
 gem 'nokogiri'
+gem  'httparty'
 
 # Authentication
 gem 'devise'

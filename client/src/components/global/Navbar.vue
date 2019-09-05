@@ -77,7 +77,7 @@ export default {
 }
 
 .active {
-  /* background-color: #ff5f5f !important */
+  /* color: #ff5f5f !important */
 }
 
 .navitem {

@@ -14,7 +14,10 @@
     <div class="row week-tab">
       <ul class="nav justify-content-center">
         <li class="align-middle" style="display: flex; align-items: center;">
-          <small class=" text-strong">Select Week:</small>
+          <select v-model="chosenSeason">
+            <option value="2019">2019</option>
+            <option value="2018">2018</option>
+          </select>
         </li>
         <li v-for="(weekNumber, key) in weekCount" :key="key" class="nav-item">
           <a class="nav-link" :class="{disabled: isActive(weekNumber)}" href="#" @click="selectWeek(weekNumber)">{{weekNumber}}</a>
@@ -120,7 +123,8 @@ export default {
       homeSelected: null,
       awaySelected: null,
       matchupLine: '',
-      chosenWeekNumber: ''
+      chosenWeekNumber: '',
+      chosenSeason: '2019'
     }
   },
   computed: {
@@ -136,7 +140,7 @@ export default {
     },
     weekCount () {
       let weeks = []
-      this.matchups.forEach(matchup => {
+      this.seasonMatchups.forEach(matchup => {
         if (!weeks.includes(matchup.week)) {
           weeks.push(matchup.week)
         }
@@ -147,14 +151,17 @@ export default {
       return _.orderBy(this.weekCount, Number, ['desc'])
     },
     weekMatchups () {
-      let filteredList = this.matchups.filter(matchup => matchup.week.toString() === this.activeWeek.toString())
+      let filteredList = this.seasonMatchups.filter(matchup => (matchup.week.toString() === this.activeWeek.toString() && matchup.season.toString() === this.chosenSeason))
       return _.orderBy(filteredList, ['date', 'time'], ['asc', 'asc'])
+    },
+    seasonMatchups () {
+      return this.matchups.filter(matchup => matchup.season.toString() === this.chosenSeason)
     },
     overallRecord () {
       let winCount = 0
       let lossCount = 0
       let pushCount = 0
-      this.matchups.forEach(matchup => {
+      this.seasonMatchups.forEach(matchup => {
         if (matchup.home_team_score && matchup.away_team_score) {
           if (matchup.correct_pick === 'true') {
             winCount++

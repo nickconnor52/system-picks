@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190823151327) do
+ActiveRecord::Schema.define(version: 20190905025708) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,17 +34,17 @@ ActiveRecord::Schema.define(version: 20190823151327) do
     t.datetime "deleted_at"
   end
 
-  create_table "schedules", primary_key: "schedule_id", id: :text, force: :cascade do |t|
-    t.text "away_team.abbreviation"
-    t.text "away_team.city"
-    t.integer "away_team.api_id"
-    t.text "away_team.name"
+  create_table "schedules", primary_key: "schedule_id", id: :text, default: -> { "nextval('schedule_id_seq'::regclass)" }, force: :cascade do |t|
+    t.text "away_team_abbreviation"
+    t.text "away_team_city"
+    t.integer "away_team_api_id"
+    t.text "away_team_name"
     t.text "date"
     t.text "delayed_or_postponed_reason"
-    t.text "home_team.abbreviation"
-    t.text "home_team.city"
-    t.integer "home_team.api_id"
-    t.text "home_team.name"
+    t.text "home_team_abbreviation"
+    t.text "home_team_city"
+    t.integer "home_team_api_id"
+    t.text "home_team_name"
     t.integer "api_id"
     t.text "location"
     t.text "original_date"
