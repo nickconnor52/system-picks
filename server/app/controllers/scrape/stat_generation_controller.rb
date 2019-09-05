@@ -14,8 +14,8 @@ class Scrape::StatGenerationController < ApplicationController
       team = Team.find_by_sql ["SELECT * FROM teams WHERE (nickname) LIKE ?", "%#{drive_team}%"]
       stat_hash = {
         team: team.to_param,
-        season: '2019',
-        week: '0',
+        season: stat_params[:season],
+        week: stat_params[:week],
         off_LOS_drive: stat["OFF. LOS/Dr"],
         def_LOS_drive: stat["DEF. LOS/Dr"],
       }
@@ -419,5 +419,10 @@ class Scrape::StatGenerationController < ApplicationController
       row_hash[header_name << index.to_s] = cell.text.squish # index due to multiple percentages
     end
     row_hash
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def stat_params
+    params.permit([:week, :season])
   end
 end
