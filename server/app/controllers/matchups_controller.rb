@@ -75,7 +75,6 @@ class MatchupsController < ApplicationController
     rescue RuntimeError => e
       render :json => { error: e.message }, status: 500
     end
-
   end
 
   private

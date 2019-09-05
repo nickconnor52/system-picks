@@ -9,6 +9,8 @@ Rails.application.routes.draw do
       post "refresh_system_spread", on: :member
     end
 
+    post 'schedule/add_weekly_matchups', to: 'schedule#add_weekly_matchups'
+
     resources :users
 
   # Authentication Routes
