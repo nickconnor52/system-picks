@@ -20,7 +20,7 @@
       <b-navbar-nav class="ml-auto">
         <b-nav-item-dropdown v-if="userSignedIn" right>
           <!-- Using 'button-content' slot -->
-          <template slot="button-content"><em>User</em></template>
+          <template slot="button-content"><em>{{ activeUser.email }}</em></template>
           <b-dropdown-item @click="signOut">Sign Out</b-dropdown-item>
         </b-nav-item-dropdown>
         <b-nav-item v-else class="nav-item" href="/signin">Sign In</b-nav-item>
@@ -36,7 +36,8 @@ export default {
   name: 'navbar',
   computed: {
     ...mapState([
-      'userSignedIn'
+      'userSignedIn',
+      'activeUser'
     ]),
     activeLink1 () {
       return this.$route.path === '/'
