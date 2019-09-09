@@ -382,7 +382,6 @@ export default {
   },
   watch: {
     activeWeek () {
-      // this.getMatchupStats()
       if (!this.matchup.away_team_score && !this.home_team_score) {
         this.queryForScore()
       }
@@ -395,25 +394,15 @@ export default {
     queryForScore () {
       let gameDate = this.matchup.date.replace(/-/g, '')
       let today = moment().format('YYYYMMDD')
-      if (gameDate <= today) {
+      if (gameDate < today) {
         axios({
-          url: 'https://api.mysportsfeeds.com/v1.2/pull/nfl/2018-regular/scoreboard.json?fordate=' + gameDate,
-          headers: {
-            'Authorization': 'Basic MzdlODBjYmEtNDk5Yy00YjQ1LWE4NjktOTRkYjBkOmhhcnZleTYyNTM=', // TODO
-            'Content-Type': 'application/json'
-          },
-          method: 'GET'
+          url: '/api/matchups/' + this.matchup.matchup_id + '/score',
+          method: 'POST',
+          data: this.matchup
+        }).then(response => {
+          this.matchup.home_team_score = response.data.home_team_score
+          this.matchup.away_team_score = response.data.away_team_score
         })
-          .then(response => {
-            let matchupResults = response.data.scoreboard.gameScore.filter(gameScore => {
-              return this.matchup.away_team.location === gameScore.game.awayTeam.City && this.matchup.home_team.location === gameScore.game.homeTeam.City
-            })
-            if (matchupResults[0].isCompleted === 'true') {
-              this.home_team_score = matchupResults[0].homeScore
-              this.away_team_score = matchupResults[0].awayScore
-              this.updateScore()
-            }
-          })
       }
     },
     clickMatchDetails () {

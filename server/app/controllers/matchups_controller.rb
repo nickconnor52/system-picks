@@ -1,6 +1,6 @@
 class MatchupsController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :set_matchup, only: [:show, :edit, :update, :destroy, :get_system_spread, :refresh_system_spread]
+  before_action :set_matchup, only: [:show, :edit, :update, :destroy, :get_system_spread, :refresh_system_spread, :score]
 
   # GET /matchups
   # GET /matchups.json
@@ -81,6 +81,30 @@ class MatchupsController < ApplicationController
       render :json => @matchup
     rescue RuntimeError => e
       render :json => { error: e.message }, status: 500
+    end
+  end
+
+  def score
+    auth = {:username => ENV['SPORTS_FEEDS_KEY'], :password => ENV['SPORTS_FEEDS_PASS']}
+    game_date = DateTime.parse(@matchup.date).strftime("%Y%m%d")
+    uri = "https://api.mysportsfeeds.com/v1.2/pull/nfl/2019-regular/scoreboard.json?fordate=#{game_date}"
+    response = HTTParty.get(uri, :basic_auth => auth)
+
+    begin
+      scores = JSON.parse(response.body)["scoreboard"]["gameScore"]
+      api_matchups = scores.select do |game|
+        (game['game']['awayTeam']['City'] == @matchup.away_team['location']) && (game['game']['homeTeam']['City'] == @matchup.home_team['location'])
+      end
+      result = api_matchups.first
+
+      @matchup.home_team_score = result['homeScore']
+      @matchup.away_team_score = result['awayScore']
+
+      @matchup.save!
+
+      render :json => @matchup
+    rescue
+      render :json => { error: 'Game score has not been posted yet' }, status: 500
     end
   end
 
