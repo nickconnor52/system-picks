@@ -35,6 +35,18 @@ if (process.env.NODE_ENV === 'production') {
   axios.defaults.baseURL = process.env.API_BASE_URI || ''
 }
 
+if (process.env.NODE_ENV === 'production') {
+  // Keep Heroku App awake
+  setInterval(() => {
+    axios.get('http://system-picks.herokuapp.com')
+  }, 300000)
+
+  // Fetch Latest Spread
+  setInterval(() => {
+    axios.post('http://system-picks.herokuapp.com/api/scrape/spread_fetch')
+  }, 7200000)
+}
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

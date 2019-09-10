@@ -37,6 +37,8 @@ class MatchupsController < ApplicationController
   def update
     # Vudo: Recalculate win or loss value based on updated score (if there is one) -- make own endpoint for score?
     update_params = matchup_params
+
+    # Handle Spread History
     if @matchup.spread_history.blank?
       spread_object = {
         spread: matchup_params[:vegas_spread],
@@ -48,6 +50,7 @@ class MatchupsController < ApplicationController
       spread_history = append_spread_to_matchup
       update_params[:spread_history] = spread_history
     end
+
     @matchup.update(update_params)
     @matchup.reload
 

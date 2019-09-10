@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     namespace :scrape do
       post 'stat_scraper' => 'stat_generation#scrape'
       get 'fetch_schedule' => 'schedule_fetch#fetch'
+      post 'spread_fetch' => 'spread_fetch#fetch'
     end
   end
 
