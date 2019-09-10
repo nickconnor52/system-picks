@@ -100,6 +100,8 @@ class MatchupsController < ApplicationController
       @matchup.home_team_score = result['homeScore']
       @matchup.away_team_score = result['awayScore']
 
+      @matchup.correct_pick = @matchup.correct_pick?.to_s
+
       @matchup.save!
 
       render :json => @matchup
