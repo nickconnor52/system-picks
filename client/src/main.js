@@ -38,12 +38,14 @@ if (process.env.NODE_ENV === 'production') {
 if (process.env.NODE_ENV === 'production') {
   // Keep Heroku App awake
   setInterval(() => {
+    console.log('Pinging the front-end')
     axios.get('http://system-picks.herokuapp.com')
   }, 300000)
 
   // Fetch Latest Spread
   setInterval(() => {
-    axios.post('http://system-picks.herokuapp.com/api/scrape/spread_fetch')
+    console.log('Fetching Recent Vegas Spreads')
+    axios.post('http://system-picks-api.herokuapp.com/api/scrape/spread_fetch')
   }, 20400000)
 }
 
