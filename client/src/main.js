@@ -44,7 +44,7 @@ if (process.env.NODE_ENV === 'production') {
   // Fetch Latest Spread
   setInterval(() => {
     axios.post('http://system-picks.herokuapp.com/api/scrape/spread_fetch')
-  }, 7200000)
+  }, 20400000)
 }
 
 /* eslint-disable no-new */
