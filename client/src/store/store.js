@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 const state = {
   luckyNumber: '52',
-  activeWeek: '1',
+  activeWeek: '2',
   userSignedIn: false,
   activeUser: {},
   chosenSeason: '2019'

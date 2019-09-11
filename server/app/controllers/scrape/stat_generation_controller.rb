@@ -12,14 +12,16 @@ class Scrape::StatGenerationController < ApplicationController
     drive_stats_hash.each do |stat|
       drive_team = stat["Team"]
       team = Team.find_by_sql ["SELECT * FROM teams WHERE (nickname) LIKE ?", "%#{drive_team}%"]
-      stat_hash = {
-        team: team.to_param,
-        season: stat_params[:season],
-        week: stat_params[:week],
-        off_LOS_drive: stat["OFF. LOS/Dr"],
-        def_LOS_drive: stat["DEF. LOS/Dr"],
-      }
-      final_stats << stat_hash
+      unless team.to_param.empty?
+        stat_hash = {
+          team: team.to_param,
+          season: stat_params[:season],
+          week: stat_params[:week],
+          off_LOS_drive: stat["OFF. LOS/Dr"].split().first, # The regular season keeps rank in () for this site
+          def_LOS_drive: stat["DEF. LOS/Dr"].split().first,
+        }
+        final_stats << stat_hash
+      end
     end
 
     # FOOTBALL OUTSIDERS
@@ -31,7 +33,7 @@ class Scrape::StatGenerationController < ApplicationController
       existing_stat_hash = final_stats.detect {|needle| needle[:team] == team.to_param}
 
       unless existing_stat_hash.nil?
-        existing_stat_hash[:off_pts_rz] = stat["Pts/RZ"]
+        existing_stat_hash[:off_pts_rz] = stat["Pts/RZ"].split().first
       end
     end
 
@@ -44,7 +46,7 @@ class Scrape::StatGenerationController < ApplicationController
       existing_stat_hash = final_stats.detect {|needle| needle[:team] == team.to_param}
 
       unless existing_stat_hash.nil?
-        existing_stat_hash[:def_pts_rz] = stat["Pts/RZ"]
+        existing_stat_hash[:def_pts_rz] = stat["Pts/RZ"].split().first
       end
     end
 
@@ -132,7 +134,7 @@ class Scrape::StatGenerationController < ApplicationController
       existing_stat_hash = final_stats.detect {|needle| needle[:team] == team.to_param}
 
       unless existing_stat_hash.nil?
-        existing_stat_hash[:off_RZA_game] = stat["2018"]
+        existing_stat_hash[:off_RZA_game] = stat["2019"]
       end
     end
 
@@ -149,7 +151,7 @@ class Scrape::StatGenerationController < ApplicationController
       existing_stat_hash = final_stats.detect {|needle| needle[:team] == team.to_param}
 
       unless existing_stat_hash.nil?
-        existing_stat_hash[:def_RZA_game] = stat["2018"]
+        existing_stat_hash[:def_RZA_game] = stat["2019"]
       end
     end
 
@@ -179,12 +181,12 @@ class Scrape::StatGenerationController < ApplicationController
   end
 
   def get_football_outsiders_drive_stats
-    doc = Nokogiri::HTML(open("https://www.footballoutsiders.com/stats/drivestats/2018"))
+    doc = Nokogiri::HTML(open("https://www.footballoutsiders.com/stats/drivestats/2019"))
 
     # Grab the second table from the site
     table = doc.css('table')[1]
     rows = table.css('tr')
-    headers = rows.shift.search('th')
+    headers = rows.shift.search('td')
     hash_build = []
     rows.each do |row|
       row_hash = convert_row_to_hash(headers, row)
@@ -195,12 +197,12 @@ class Scrape::StatGenerationController < ApplicationController
   end
 
   def get_football_outsiders_offensive_stats
-    doc = Nokogiri::HTML(open("https://www.footballoutsiders.com/stats/drivestatsoff/2018"))
+    doc = Nokogiri::HTML(open("https://www.footballoutsiders.com/stats/drivestatsoff/2019"))
 
     # Grab the second table from the site
     table = doc.css('table')[1]
     rows = table.css('tr')
-    headers = rows.shift.search('th')
+    headers = rows.shift.search('td')
     hash_build = []
     rows.each do |row|
       row_hash = convert_row_to_hash(headers, row)
@@ -211,12 +213,12 @@ class Scrape::StatGenerationController < ApplicationController
   end
 
   def get_football_outsiders_defensive_stats
-    doc = Nokogiri::HTML(open("https://www.footballoutsiders.com/stats/drivestatsdef/2018"))
+    doc = Nokogiri::HTML(open("https://www.footballoutsiders.com/stats/drivestatsdef/2019"))
 
     # Grab the second table from the site
     table = doc.css('table')[1]
     rows = table.css('tr')
-    headers = rows.shift.search('th')
+    headers = rows.shift.search('td')
     hash_build = []
     rows.each do |row|
       row_hash = convert_row_to_hash(headers, row)
@@ -227,7 +229,7 @@ class Scrape::StatGenerationController < ApplicationController
   end
 
   def get_espn_give_take_stats
-    doc = Nokogiri::HTML(open("https://www.espn.com/nfl/stats/team/_/view/turnovers/season/2018/seasontype/2"))
+    doc = Nokogiri::HTML(open("https://www.espn.com/nfl/stats/team/_/view/turnovers/season/2019/seasontype/2"))
 
     # Grab the second table from the site
     table = doc.css('table')[0]
@@ -254,7 +256,7 @@ class Scrape::StatGenerationController < ApplicationController
   end
 
   def get_espn_offensive_third_stats
-    doc = Nokogiri::HTML(open("https://www.espn.com/nfl/stats/team/_/season/2018/seasontype/2/stat/downs"))
+    doc = Nokogiri::HTML(open("https://www.espn.com/nfl/stats/team/_/season/2019/seasontype/2/stat/downs"))
 
     # Grab the second table from the site
     table = doc.css('table')[0]
@@ -281,7 +283,7 @@ class Scrape::StatGenerationController < ApplicationController
   end
 
   def get_espn_defensive_third_stats
-    doc = Nokogiri::HTML(open("https://www.espn.com/nfl/stats/team/_/view/defense/season/2018/seasontype/2/stat/downs"))
+    doc = Nokogiri::HTML(open("https://www.espn.com/nfl/stats/team/_/view/defense/season/2019/seasontype/2/stat/downs"))
 
     # Grab the second table from the site
     table = doc.css('table')[0]
@@ -309,7 +311,7 @@ class Scrape::StatGenerationController < ApplicationController
 
 
   def get_espn_offensive_yardage_stats
-    doc = Nokogiri::HTML(open("https://www.espn.com/nfl/stats/team/_/view/offense/season/2018/seasontype/2"))
+    doc = Nokogiri::HTML(open("https://www.espn.com/nfl/stats/team/_/view/offense/season/2019/seasontype/2"))
 
     # Grab the second table from the site
     table = doc.css('table')[0]
@@ -336,7 +338,7 @@ class Scrape::StatGenerationController < ApplicationController
   end
 
   def get_espn_defensive_yardage_stats
-    doc = Nokogiri::HTML(open("https://www.espn.com/nfl/stats/team/_/view/defense/season/2018/seasontype/2"))
+    doc = Nokogiri::HTML(open("https://www.espn.com/nfl/stats/team/_/view/defense/season/2019/seasontype/2"))
 
     # Grab the second table from the site
     table = doc.css('table')[0]
