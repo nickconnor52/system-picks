@@ -186,7 +186,7 @@ class Scrape::StatGenerationController < ApplicationController
     # Grab the second table from the site
     table = doc.css('table')[1]
     rows = table.css('tr')
-    headers = rows.shift.search('td')
+    headers = rows.shift.search('th')
     hash_build = []
     rows.each do |row|
       row_hash = convert_row_to_hash(headers, row)
@@ -202,7 +202,7 @@ class Scrape::StatGenerationController < ApplicationController
     # Grab the second table from the site
     table = doc.css('table')[1]
     rows = table.css('tr')
-    headers = rows.shift.search('td')
+    headers = rows.shift.search('th')
     hash_build = []
     rows.each do |row|
       row_hash = convert_row_to_hash(headers, row)
@@ -218,7 +218,7 @@ class Scrape::StatGenerationController < ApplicationController
     # Grab the second table from the site
     table = doc.css('table')[1]
     rows = table.css('tr')
-    headers = rows.shift.search('td')
+    headers = rows.shift.search('th')
     hash_build = []
     rows.each do |row|
       row_hash = convert_row_to_hash(headers, row)
