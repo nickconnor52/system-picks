@@ -233,9 +233,9 @@ class Scrape::StatGenerationController < ApplicationController
 
     # Grab the second table from the site
     table = doc.css('table')[0]
-    teams_column = table.search('.v-top').first
+    teams_column = table.search('.Table__TBODY').first
 
-    teams_array = teams_column.search('tbody tr')
+    teams_array = teams_column.search('tr')
     rows = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/tbody').search('tr')
     headers = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/thead[2]/tr').search('th')
 
@@ -260,9 +260,9 @@ class Scrape::StatGenerationController < ApplicationController
 
     # Grab the second table from the site
     table = doc.css('table')[0]
-    teams_column = table.search('.v-top').first
+    teams_column = table.search('.Table__TBODY').first
 
-    teams_array = teams_column.search('tbody tr')
+    teams_array = teams_column.search('tr')
     rows = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/tbody').search('tr')
     headers = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/thead[2]/tr').search('th')
 
@@ -287,9 +287,9 @@ class Scrape::StatGenerationController < ApplicationController
 
     # Grab the second table from the site
     table = doc.css('table')[0]
-    teams_column = table.search('.v-top').first
+    teams_column = table.search('.Table__TBODY').first
 
-    teams_array = teams_column.search('tbody tr')
+    teams_array = teams_column.search('tr')
     rows = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/tbody').search('tr')
     headers = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/thead[2]/tr').search('th')
 
@@ -315,9 +315,9 @@ class Scrape::StatGenerationController < ApplicationController
 
     # Grab the second table from the site
     table = doc.css('table')[0]
-    teams_column = table.search('.v-top').first
+    teams_column = table.search('.Table__TBODY').first
 
-    teams_array = teams_column.search('tbody tr')
+    teams_array = teams_column.search('tr')
     rows = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/tbody').search('tr')
     headers = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/thead[2]/tr').search('th')
 
@@ -342,12 +342,11 @@ class Scrape::StatGenerationController < ApplicationController
 
     # Grab the second table from the site
     table = doc.css('table')[0]
-    teams_column = table.search('.v-top').first
+    teams_column = table.search('.Table__TBODY').first
 
-    teams_array = teams_column.search('tbody tr')
+    teams_array = teams_column.search('tr')
     rows = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/tbody').search('tr')
     headers = table.search('//*[@id="fittPageContainer"]/div/div[1]/div/article/div/section/table/tbody/tr/td[2]/div/div/div[2]/table/tbody/tr/td/div/table/thead[2]/tr').search('th')
-
 
     hash_build = []
     rows.each do |row|

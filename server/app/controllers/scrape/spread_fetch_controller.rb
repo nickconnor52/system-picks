@@ -35,8 +35,9 @@ class Scrape::SpreadFetchController < ApplicationController
         end
       end
 
-      api_spread_hash = game["lines"]["1"] || game["lines"].first
+      api_spread_hash = game["lines"]["1"] || game["lines"].first.second # This is suspect
       spread = api_spread_hash["spread"]["point_spread_home"]
+
       season = DateTime.now.year
       @matchup = Matchup.find_by(home_team: @home_team, away_team: @away_team, season: season)
 
@@ -59,7 +60,7 @@ class Scrape::SpreadFetchController < ApplicationController
         @matchup.update(update_attrs)
 
       rescue
-        @error_count += 1
+        @error_count = 1
       end
     end
 
@@ -77,8 +78,6 @@ class Scrape::SpreadFetchController < ApplicationController
     parsed_spread_history << spread_object
     return parsed_spread_history.to_json
   end
-
-
 end
 
 
