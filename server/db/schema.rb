@@ -15,6 +15,12 @@ ActiveRecord::Schema.define(version: 20190905210425) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "local_schedules", id: :serial, force: :cascade do |t|
+  end
+
+  create_table "local_stats", id: :serial, force: :cascade do |t|
+  end
+
   create_table "matchups", primary_key: "matchup_id", id: :text, default: -> { "nextval('matchup_id_seq'::regclass)" }, force: :cascade do |t|
     t.text "away_team_id"
     t.text "correct_pick"

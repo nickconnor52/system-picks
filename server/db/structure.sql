@@ -5,6 +5,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -36,6 +37,64 @@ CREATE TABLE public.ar_internal_metadata (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: local_schedules; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.local_schedules (
+    id integer NOT NULL
+);
+
+
+--
+-- Name: local_schedules_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.local_schedules_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: local_schedules_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.local_schedules_id_seq OWNED BY public.local_schedules.id;
+
+
+--
+-- Name: local_stats; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.local_stats (
+    id integer NOT NULL
+);
+
+
+--
+-- Name: local_stats_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.local_stats_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: local_stats_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.local_stats_id_seq OWNED BY public.local_stats.id;
 
 
 --
@@ -71,7 +130,8 @@ CREATE TABLE public.matchups (
     spread_history text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    deleted_at timestamp without time zone
+    deleted_at timestamp without time zone,
+    custom_weight text DEFAULT '0'::text
 );
 
 
@@ -81,16 +141,16 @@ CREATE TABLE public.matchups (
 
 CREATE TABLE public.schedules (
     schedule_id text NOT NULL,
-    "away_team.abbreviation" text,
-    "away_team.city" text,
-    "away_team.api_id" integer,
-    "away_team.name" text,
+    away_team_abbreviation text,
+    away_team_city text,
+    away_team_api_id integer,
+    away_team_name text,
     date text,
     delayed_or_postponed_reason text,
-    "home_team.abbreviation" text,
-    "home_team.city" text,
-    "home_team.api_id" integer,
-    "home_team.name" text,
+    home_team_abbreviation text,
+    home_team_city text,
+    home_team_api_id integer,
+    home_team_name text,
     api_id integer,
     location text,
     original_date text,
@@ -100,6 +160,25 @@ CREATE TABLE public.schedules (
     "time" text,
     week integer
 );
+
+
+--
+-- Name: schedule_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.schedule_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: schedule_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.schedule_id_seq OWNED BY public.schedules.schedule_id;
 
 
 --
@@ -212,6 +291,27 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
+-- Name: local_schedules id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.local_schedules ALTER COLUMN id SET DEFAULT nextval('public.local_schedules_id_seq'::regclass);
+
+
+--
+-- Name: local_stats id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.local_stats ALTER COLUMN id SET DEFAULT nextval('public.local_stats_id_seq'::regclass);
+
+
+--
+-- Name: schedules schedule_id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.schedules ALTER COLUMN schedule_id SET DEFAULT nextval('public.schedule_id_seq'::regclass);
+
+
+--
 -- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -224,6 +324,22 @@ ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_
 
 ALTER TABLE ONLY public.ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: local_schedules local_schedules_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.local_schedules
+    ADD CONSTRAINT local_schedules_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: local_stats local_stats_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.local_stats
+    ADD CONSTRAINT local_stats_pkey PRIMARY KEY (id);
 
 
 --
@@ -314,6 +430,10 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190808023545'),
 ('20190809022644'),
 ('20190818025624'),
-('20190823151327');
+('20190823151327'),
+('20190905015000'),
+('20190905025621'),
+('20190905025708'),
+('20190905210425');
 
 
