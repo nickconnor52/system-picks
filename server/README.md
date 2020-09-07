@@ -61,7 +61,7 @@ $: git push -f heroku-[branch] deploy:master
 $: git branch -D deploy
 ```
 
-Now have two separate Heroku ENV's, heroku-api & heroku-api
+Now have two separate Heroku ENV's, heroku-api & heroku-ui
 The plan will be to build release and then push it to the separate branches
 ```
 $: git subtree push ---prefix [directory] [heroku-app] [branch-name (release)]
